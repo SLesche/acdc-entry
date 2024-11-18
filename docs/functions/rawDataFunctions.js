@@ -1,27 +1,31 @@
 function addRawData(parentElement, control, publication_idx, study_idx) {
     // Create a new list item for the dataset
+    const dataset_idx = getNewId(control.publication_info[publication_idx].study_info[study_idx].dataset_info);
+    const dataset_name = "Raw Data " + (dataset_idx + 1);
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx] = setupDatasetInfo(dataset_idx);
+
     const listItem = document.createElement("li");
     listItem.className = "collapsible collapsible-nocontent";
-    listItem.dataset.index = "rawdata-" + publication_idx + "-" + study_idx;
-    listItem.id = "rawdata-" + publication_idx + "-" + study_idx;
+    listItem.dataset.index = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+    listItem.id = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
 
 
     // Create a span for the dataset name
     const span = document.createElement("span");
-    span.textContent = "Raw Data";
+    span.textContent = dataset_name;
 
-    // // Create action buttons
-    // const actions = document.createElement("div");
-    // actions.className = "actions";
+    // Create action buttons
+    const actions = document.createElement("div");
+    actions.className = "actions";
 
-    // const removeButton = document.createElement("button");
-    // removeButton.innerHTML = '&times;'; // Red X
-    // removeButton.classList.add('delete-button');
-    // removeButton.onclick = function(event) {
-    //     event.stopPropagation();
-    //     removeItem(listItem, control);
-    // };
-    // actions.appendChild(removeButton);
+    const removeButton = document.createElement("button");
+    removeButton.innerHTML = '&times;'; // Red X
+    removeButton.classList.add('delete-button');
+    removeButton.onclick = function(event) {
+        event.stopPropagation();
+        removeItem(listItem, control);
+    };
+    actions.appendChild(removeButton);
 
     // Append the span and actions to the list item
     listItem.appendChild(span);
@@ -39,17 +43,17 @@ function addRawData(parentElement, control, publication_idx, study_idx) {
     // Update content area
     listItem.addEventListener("click", function(event) {
         event.stopPropagation(); // Prevent any default action
-        initializeRawDataSurvey(control, publication_idx, study_idx);
+        initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx);
     });
 }
 
-function initializeRawDataSurvey(control, publication_idx, study_idx) {
-    const raw_data = control.publication_info[publication_idx].study_info[study_idx].raw_data;
+function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {
+    const raw_data = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data;
     const study_name = control.publication_info[publication_idx].study_info[study_idx].study_name;
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">
-        <h1>${study_name}: Raw Data</h1> 
+        <h1>${study_name}: Raw Data ${dataset_idx + 1}</h1> 
             <p>Here, please provide information about your raw data by uploading it through the interface below. Your data should adhere to the following guidelines:</p>
             <ul class = "list-of-entries">
                 <li>Ensure that your dataset includes all columns as specified in the guidelines. If certain measurements (e.g., reaction times) were not collected, you may leave those columns out.</li>
@@ -234,7 +238,7 @@ function initializeRawDataSurvey(control, publication_idx, study_idx) {
         if (allow_submission) {
             const collected_data = await collectRawData();
             if (validateRawData(collected_data, control, publication_idx, study_idx) || control.testing){
-                updateRawDataSurvey(control, publication_idx, study_idx);
+                updateRawDataSurvey(control, publication_idx, study_idx, dataset_idx);
             }
         }
     });
@@ -280,203 +284,6 @@ function validateRawData(raw_data, control, publication_idx, study_idx) {
  
     var required_headers = ['subject', 'presentation_identifier', 'trial', 'response', 'repeated'];
 
-    // if there were experimental conditions, add those to required headers
-    const study_info = control.publication_info[publication_idx].study_info[study_idx];
-
-    if (study_info.condition_data.has_within_conditions == 1) {
-        required_headers.push('within_identifier');
-    }
-    if (study_info.condition_data.has_between_conditions == 1) {
-        required_headers.push('between_identifier');
-    }
-
-    // If there is information on statements, add that identifier to the required headers
-    if (study_info.study_data.statementset_name !== "No information") {
-        required_headers.push('statement_identifier');
-    }
-
-    // If there was response time collected, add that to required headers
-    if (study_info.study_data.rt_measured == 1) {
-        required_headers.push('rt');
-    }
-
-    // if certainty measured, add that
-    if (study_info.study_data.subjective_certainty == 1) {
-        required_headers.push('certainty');
-    }
-
-    // Check if all required headers are present
-    const data_columns = Object.keys(raw_data.data[0]);
-
-    const missing_headers = required_headers.filter(header => !data_columns.includes(header));
-    if (missing_headers.length > 0) {
-        alert_message = `The following columns are missing from the uploaded file: ${missing_headers.join(', ')}.`;
-        displayValidationError('raw_data_file', alert_message);
-        return false;
-    }
-
-    // check for unknown columns
-    const unknown_columns = data_columns.filter(header => !required_headers.includes(header));
-    if (unknown_columns.length > 0) {
-        alert_message = `The uploaded file contains unknown columns: ${unknown_columns.join(', ')}`;
-        displayWarningMessage('raw_data_file', alert_message);
-    }
-
-    // Check that the number of unique sessions is equal to the number of sessions specified in the repetition data
-    const unique_sessions = [...new Set(raw_data.data.map(row => row.presentation_identifier).filter(presentation_identifier => presentation_identifier !== 'NA'))].map(String);
-
-    // Extract repetition identifiers from repetition_data
-    const presentation_identifiers = study_info.repetition_data.map(data => data.presentation_identifier);
-
-    // Check for missing presentation_identifier identifiers
-    const missing_presentation_identifiers = presentation_identifiers.filter(identifier => !unique_sessions.includes(identifier));
-
-    // Check for extra presentation identifiers
-    const extra_presentation_identifiers = unique_sessions.filter(identifier => !presentation_identifiers.includes(identifier));
-
-    var alert_message = '';
-
-    if (missing_presentation_identifiers.length > 0) {
-        alert_message = `The following presentation identifiers are missing from the uploaded file: ${missing_presentation_identifiers.join(', ')}.`;
-        displayValidationError('raw_data_file', alert_message)
-    }
-
-    if (extra_presentation_identifiers.length > 0) {
-        alert_message = `The following presentation identifiers in the uploaded file were not previously added to the experimental conditions: ${extra_presentation_identifiers.join(', ')}.`;
-        displayValidationError('raw_data_file', alert_message)
-    }
-
-    // if there were experimental conditions, check that all identifiers are present in the experimental conditions
-    if (study_info.condition_data.has_within_conditions == 1) {
-        const within_identifiers = [...new Set(raw_data.data.map(row => row.within_identifier).filter(identifier => identifier !== 'NA'))].map(String);
-
-        // Check for missing within-subject condition identifiers
-        const reported_within_identifiers = study_info.condition_data.within_condition_details.map(detail => detail.identifier);
-        const missing_within_identifiers = reported_within_identifiers.filter(identifier => !within_identifiers.includes(identifier));
-        
-        // Check for extra within-subject condition identifiers
-        const extra_within_identifiers = within_identifiers.filter(identifier => !reported_within_identifiers.includes(identifier));
-
-        let alert_messages = [];
-
-        if (missing_within_identifiers.length > 0) {
-            alert_messages.push(`The following within-subject condition identifiers are missing from the uploaded file: ${missing_within_identifiers.join(', ')}.`);
-        }
-
-        if (extra_within_identifiers.length > 0) {
-            alert_messages.push(`The following within-subject condition identifiers in the uploaded file were not previously added to the experimental conditions: ${extra_within_identifiers.join(', ')}.`);
-        }
-
-        if (alert_messages.length > 0) {
-            displayValidationError('raw_data_file', alert_messages.join(' '));
-            return false;
-        }
-    }
-
-    if (study_info.condition_data.has_between_conditions == 1) {
-        const between_identifiers = [...new Set(raw_data.data.map(row => row.between_identifier).filter(identifier => identifier !== 'NA'))].map(String);
-
-        // Check for missing between-subject condition identifiers
-        const reported_between_identifiers = study_info.condition_data.between_condition_details.map(detail => detail.identifier);
-        const missing_between_identifiers = reported_between_identifiers.filter(identifier => !between_identifiers.includes(identifier));
-
-        // Check for extra between-subject condition identifiers
-        const extra_between_identifiers = between_identifiers.filter(identifier => !reported_between_identifiers.includes(identifier));
-
-        let alert_messages = [];
-
-        if (missing_between_identifiers.length > 0) {
-            alert_messages.push(`The following between-subject condition identifiers are missing from the uploaded file: ${missing_between_identifiers.join(', ')}.`);
-        }
-
-        if (extra_between_identifiers.length > 0) {
-            alert_messages.push(`The following between-subject condition identifiers in the uploaded file were not previously added to the experimental conditions: ${extra_between_identifiers.join(', ')}.`);
-        }
-
-        if (alert_messages.length > 0) {
-            displayValidationError('raw_data_file', alert_messages.join(' '));
-            return false;
-        }
-    }
-
-    // If there is information on the statement, same thing with statement identifiers
-    if (study_info.study_data.statementset_name !== "no information") {
-        const statement_identifiers = [...new Set(raw_data.data.map(row => row.statement_identifier).filter(identifier => identifier !== 'NA'))].map(String);
-
-        const statementset_name = study_info.study_data.statementset_name;
-        const statementset_index = getStatementSetIndex(statementset_name);
-        const statementset_data = control.statementset_info[statementset_index].statementset_data;
-
-        // Check for missing statement identifiers
-        const reported_statement_identifiers = statementset_data.statement_publication_data.map(row => row.statement_identifier).map(String);
-        const missing_statement_identifiers = reported_statement_identifiers.filter(identifier => !statement_identifiers.includes(identifier));
-        
-        // Check for extra statement identifiers
-        const extra_statement_identifiers = statement_identifiers.filter(identifier => !reported_statement_identifiers.includes(identifier));
-
-        let alert_messages = [];
-
-        if (missing_statement_identifiers.length > 0) {
-            alert_messages.push(`The following statement identifiers are missing from the uploaded file: ${missing_statement_identifiers.join(', ')}.`);
-        }
-
-        if (extra_statement_identifiers.length > 0) {
-            alert_messages.push(`The following statement identifiers in the uploaded file were not previously added to the statements: ${extra_statement_identifiers.join(', ')}.`);
-        }
-
-        if (alert_messages.length > 0) {
-            displayValidationError('raw_data_file', alert_messages.join(' '));
-            return false;
-        }
-    }
-
-    // if rt is present, check that the average value is below 100, otherwise say that it is likely that the data is not in seconds
-    if (study_info.study_data.rt_measured == 1) {
-        const rts = raw_data.data.map(row => row.rt).filter(rt => rt !== 'NA');
-        const average_rt = rts.reduce((a, b) => a + b) / rts.length;
-
-        if (average_rt > 100) {
-            alert_message = 'The average response time in the uploaded file is above 100. Please check if the data is in seconds.';
-            displayWarningMessage('raw_data_file', alert_message);
-        }
-    }
-
-    // Check that accuracy is only 0, 1 or NA
-    const repeated_vals = raw_data.data.map(row => row.repeated);
-    const invalid_repeated_vals = repeated_vals.filter(val => val != '0' && val != '1' && val !== 'NA');
-    if (invalid_repeated_vals.length > 0) {
-        alert_message = `The "repeated" column contains invalid values: ${invalid_repeated_vals.slice(0, 5).join(', ')}. It should only contain "0", "1", or "NA".`;
-        displayValidationError('raw_data_file', alert_message);
-        return false;
-    }
-
-    // Check that response has a value maximum to that of the steps indicated by the study question and minimum of 0 or Na
-    const response_vals = raw_data.data.map(row => row.response);
-    const scale_steps = study_info.study_data.truth_rating_steps;
-    const invalid_response_vals = response_vals.filter(val => val !== 'NA' && (val < 0 || val > scale_steps));
-    if (invalid_response_vals.length > 0) {
-        alert_message = `The "response" column contains invalid values: ${invalid_response_vals.slice(0, 5).join(', ')}. It should only contain values between 0 and ${scale_steps}, or "NA".`;
-        displayValidationError('raw_data_file', alert_message);
-        return false;
-    }
-
-    // Now, check the mean response value for repeated statements vs. non-repeated statements. 
-    // repeated statements should have higher mean response, otherwise display warning that no truth effect present
-    const repeated_responses = raw_data.data
-        .filter(row => row.repeated == '1' && row.response !== 'NA')
-        .map(row => parseFloat(row.response));
-    const non_repeated_responses = raw_data.data
-        .filter(row => row.repeated == '0' && row.response !== 'NA')
-        .map(row => parseFloat(row.response));
-
-    const meanRepeatedResponse = repeated_responses.reduce((a, b) => a + b, 0) / repeated_responses.length;
-    const meanNonRepeatedResponse = non_repeated_responses.reduce((a, b) => a + b, 0) / non_repeated_responses.length;
-
-    if (meanRepeatedResponse <= meanNonRepeatedResponse) {
-        alert_message = 'The mean response value for repeated statements is not higher than for non-repeated statements. This suggests that there may be no truth effect present.';
-        displayWarningMessage('raw_data_file', alert_message);
-    }
-
     return true;
 }
 
@@ -518,19 +325,19 @@ function checkOtherSubmissions(control, publication_idx, study_idx) {
 
     return true;
 }
-async function updateRawDataSurvey(control, publication_idx, study_idx) {
+async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {
     raw_data = await collectRawData();
 
     raw_data.validated = true;
 
     // Store the values in the control object
-    control.publication_info[publication_idx].study_info[study_idx].raw_data = raw_data
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data = raw_data
 
     // Optionally, display a confirmation message
     alert('Survey submitted successfully!');
 
     // Add a checkmark to the currently selected sidebar item
-    const item_id =  "rawdata-" + publication_idx + "-" + study_idx;
+    const item_id =  "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     addGreenCheckmarkById(item_id);
 
     const rows_to_display = 6;

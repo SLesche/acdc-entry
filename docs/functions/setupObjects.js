@@ -3,11 +3,19 @@ function setupStudyInfo(study_name){
         study_name: study_name,
         study_data: {},
         measurement_data: {},
-        raw_data: {},
-        condition_data: {},
-        repetition_data: {},
+        dataset_info: {},
     };
     return study_info
+}
+
+function setupDatasetInfo(dataset_id){
+    dataset_info = {
+        dataset_id: dataset_id,
+        raw_data: {},
+        within_data: {},
+        task_data: {},
+    };
+    return dataset_info
 }
 
 function setupPublicationInfo(publication_name){

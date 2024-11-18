@@ -35,6 +35,18 @@ function addStudy(parentElement, control, publication_idx) {
     const nestedList = document.createElement("ul");
     nestedList.className = "nested";
 
+    // Create a list item for the "Add Dataset" button
+    const addDatasetListItem = document.createElement("li");
+    const addDatasetButton = document.createElement("button");
+    addDatasetButton.className = "menu-button";
+    addDatasetButton.textContent = "+ Add Dataset";
+    addDatasetButton.onclick = function() {
+        addRawData(nestedList, control, publication_idx, study_idx);
+    };
+    addDatasetListItem.appendChild(addDatasetButton);
+    
+    nestedList.appendChild(addDatasetListItem);
+
     // Append the nested list to the study item
     listItem.appendChild(nestedList);
 
@@ -55,12 +67,6 @@ function addStudy(parentElement, control, publication_idx) {
         event.stopPropagation(); // Prevent the collapsible toggle
         initializeStudySurvey(control, publication_idx, study_idx);
     });
-
-    // Add repetition survey
-    addRepetition(nestedList, control, publication_idx, study_idx);
-
-    // Add condition survey
-    addConditions(nestedList, control, publication_idx, study_idx);
 
     // Add raw data survey
     addRawData(nestedList, control, publication_idx, study_idx);
