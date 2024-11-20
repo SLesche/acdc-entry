@@ -45,10 +45,11 @@ function addWithinData(parentElement, control, publication_idx, study_idx, datas
 
 function initializeConditionSurvey(control, publication_idx, study_idx, dataset_idx) {
     const condition_data = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].within_data;
+    const study_name = control.publication_info[publication_idx].study_info[study_idx].study_name;
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">      
-    <h1>Within Conditions</h1>
+    <h1>${study_name}: Raw Data ${dataset_idx + 1} - Within Conditions</h1>
     <p>This section is designed to collect detailed information about the experimental conditions of your study. Importantly, this should only pertain to manipulations not already encoded through other parts of the questionnaire. For example, the within condition "repeated vs. new statement" should be encoded in its own column in the raw data and not here. Similarly, manipulations of the measurement sessions should be endoced through different measurement sessions in the questionnaire "Measurement Sessions" and then be encoded in the column "session". Only those manipulations that cannot be adequately captured by those parts of the questionnaire should be added here. For example, a between condition of "old vs. young" participants should be coded here.</p>
     <p>You will also be asked about any experimental manipulations that were applied within the dataset. This information is important for providing context in case there were any unusual occurrences during the study, helping others understand possible variations in the data.</p>
         <form id="conditionSurvey" class="survey-form">
