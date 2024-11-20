@@ -8,9 +8,8 @@
     <script src = "functions/publicationFunctions.js"></script>
     <script src = "functions/studyFunctions.js"></script>
     <script src = "functions/conditionFunctions.js"></script>
-    <script src = "functions/repetitionFunctions.js"></script>
     <script src = "functions/measurementFunctions.js"></script>
-    <script src = "functions/statementSetFunctions.js"></script>
+    <script src = "functions/taskFunctions.js"></script>
     <script src = "functions/rawDataFunctions.js"></script>
     <script src = "functions/overviewFunctions.js"></script>
     <script src = "functions/modifyItem.js"></script>
@@ -45,7 +44,7 @@
         // Initialize control object
         var control = {
             publication_info: {},
-            statementset_info: {},
+            task_info: {},
             testing: false,
         };
 
@@ -62,8 +61,8 @@
         // setup publication
         addPublication(control);
 
-        // //setup statement set
-        // addStatementOverview(control);
+        //setup statement set
+        addTaskOverview(control);
 
         // Load the overview page
         generateOverviewPage(control);

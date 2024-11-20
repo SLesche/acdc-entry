@@ -82,16 +82,16 @@ function generateOverviewPage(control) {
 
 function getNumberOfSubmissions(control) {
     const num_total_publications = Object.keys(control.publication_info).length;
-    const num_statement_sets = Object.keys(control.statementset_info).length;
+    const num_tasks = Object.keys(control.task_info).length;
     let num_total_studies = 0;
 
     let num_statement_sets_validated = 0;
     let num_publications_validated = 0;
     let num_studies_validated = 0;
 
-    // Iterate over statement sets
-    for (let statementset_idx = 0; statementset_idx < num_statement_sets; statementset_idx++) {
-        if (control.statementset_info[statementset_idx].statementset_data.validated) {
+    // Iterate over task sets
+    for (let task_idx = 0; task_idx < num_tasks; task_idx++) {
+        if (control.task_info[task_idx].task_data.validated) {
             num_statement_sets_validated += 1;
         }
     }
@@ -116,13 +116,13 @@ function getNumberOfSubmissions(control) {
     }
 
     // Compute percentages
-    const percent_statement_sets_validated = (num_statement_sets_validated / num_statement_sets) * 100;
+    const percent_statement_sets_validated = (num_statement_sets_validated / num_tasks) * 100;
     const percent_publication_validated = (num_publications_validated / num_total_publications) * 100;
     const percent_studies_validated = (num_studies_validated / num_total_studies) * 100;
 
     return {
         num_total_publications,
-        num_statement_sets,
+        num_tasks,
         num_total_studies,
         num_statement_sets_validated,
         num_publications_validated,

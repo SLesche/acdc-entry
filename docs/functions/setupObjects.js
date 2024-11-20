@@ -27,10 +27,10 @@ function setupPublicationInfo(publication_name){
     return publication_info
 }
 
-function setupStatementSetInfo(statementset_name){
-    statementset_info = {
-        statementset_name: statementset_name,
-        statementset_data: {},
+function setupTaskInfo(task_name){
+    task_info = {
+        task_name: task_name,
+        task_data: {},
     };
-    return statementset_info
+    return task_info
 }
