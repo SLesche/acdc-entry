@@ -5,7 +5,7 @@ function addRawData(parentElement, control, publication_idx, study_idx) {
     control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx] = setupDatasetInfo(dataset_idx);
 
     const listItem = document.createElement("li");
-    listItem.className = "collapsible collapsible-nocontent";
+    listItem.className = "collapsible";
     listItem.dataset.index = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     listItem.id = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
 
@@ -29,22 +29,35 @@ function addRawData(parentElement, control, publication_idx, study_idx) {
 
     // Append the span and actions to the list item
     listItem.appendChild(span);
-    // listItem.appendChild(actions);
+    listItem.appendChild(actions);
 
     // Create a nested list for raw data
     const nestedList = document.createElement("ul");
+    nestedList.className = "nested";
 
-    // Append the nested list to the dataset item
+    // Append the nested list to the study item
     listItem.appendChild(nestedList);
 
     // Append the new list item to the parent element
     parentElement.appendChild(listItem);
 
-    // Update content area
+    // Add collapsible functionality
     listItem.addEventListener("click", function(event) {
-        event.stopPropagation(); // Prevent any default action
+        if (event.target === this) {
+            this.classList.toggle("active");
+        }
+    });
+    // Toggle the collapsible on by default
+    listItem.classList.add("active");
+
+    // Update content area
+    span.addEventListener("click", function(event) {
+        event.stopPropagation(); // Prevent the collapsible toggle
         initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx);
     });
+
+    // Add raw data survey
+    addWithinData(nestedList, control, publication_idx, study_idx, dataset_idx);
 }
 
 function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {

@@ -1,14 +1,14 @@
-function addConditions(parentElement, control, publication_idx, study_idx) {
+function addWithinData(parentElement, control, publication_idx, study_idx, dataset_idx) {
     // Create a new list item for the dataset
     const listItem = document.createElement("li");
     listItem.className = "collapsible collapsible-nocontent";
-    listItem.dataset.index = "conditions-" + publication_idx + "-" + study_idx;
-    listItem.id = "conditions-" + publication_idx + "-" + study_idx;
+    listItem.dataset.index = "conditions-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+    listItem.id = "conditions-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
 
 
     // Create a span for the dataset name
     const span = document.createElement("span");
-    span.textContent = "Experimental Conditions";
+    span.textContent = "Within Conditions";
 
     // // Create action buttons
     // const actions = document.createElement("div");
@@ -39,17 +39,16 @@ function addConditions(parentElement, control, publication_idx, study_idx) {
     // Update content area
     listItem.addEventListener("click", function(event) {
         event.stopPropagation(); // Prevent any default action
-        initializeConditionSurvey(control, publication_idx, study_idx);
+        initializeConditionSurvey(control, publication_idx, study_idx, dataset_idx);
     });
 }
 
-function initializeConditionSurvey(control, publication_idx, study_idx){
-    const condition_data = control.publication_info[publication_idx].study_info[study_idx].condition_data;
-    const study_name = control.publication_info[publication_idx].study_info[study_idx].study_name;
+function initializeConditionSurvey(control, publication_idx, study_idx, dataset_idx) {
+    const condition_data = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].within_data;
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">      
-    <h1>${study_name}: Experimental Conditions</h1>
+    <h1>Within Conditions</h1>
     <p>This section is designed to collect detailed information about the experimental conditions of your study. Importantly, this should only pertain to manipulations not already encoded through other parts of the questionnaire. For example, the within condition "repeated vs. new statement" should be encoded in its own column in the raw data and not here. Similarly, manipulations of the measurement sessions should be endoced through different measurement sessions in the questionnaire "Measurement Sessions" and then be encoded in the column "session". Only those manipulations that cannot be adequately captured by those parts of the questionnaire should be added here. For example, a between condition of "old vs. young" participants should be coded here.</p>
     <p>You will also be asked about any experimental manipulations that were applied within the dataset. This information is important for providing context in case there were any unusual occurrences during the study, helping others understand possible variations in the data.</p>
         <form id="conditionSurvey" class="survey-form">
@@ -138,7 +137,7 @@ function initializeConditionSurvey(control, publication_idx, study_idx){
     document.getElementById('conditionSurvey').addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent default form submission
         if (validateConditionData(collectConditionData()) || control.testing){
-            updateConditionSurvey(control, publication_idx, study_idx);
+            updateConditionSurvey(control, publication_idx, study_idx, dataset_idx);
         }
     });
 }
@@ -306,18 +305,18 @@ function validateConditionData(condition_data){
     return true
 }
 
-function updateConditionSurvey(control, publication_idx, study_idx) {
+function updateConditionSurvey(control, publication_idx, study_idx, dataset_idx) {
     condition_data = collectConditionData();
 
     condition_data.validated = validateConditionData(condition_data);
 
     // Store the values in the control object
-    control.publication_info[publication_idx].study_info[study_idx].condition_data = condition_data
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].within_data = condition_data
 
     // Optionally, display a confirmation message
     alert('Survey submitted successfully!');
 
     // Add a checkmark to the currently selected sidebar item
-    const item_id =  "conditions-" + publication_idx + "-" + study_idx;
+    const item_id =  "conditions-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     addGreenCheckmarkById(item_id);
 }

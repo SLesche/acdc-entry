@@ -68,11 +68,14 @@ function addStudy(parentElement, control, publication_idx) {
         initializeStudySurvey(control, publication_idx, study_idx);
     });
 
+    // Add measurement survey
+    addMeasurement(nestedList, control, publication_idx, study_idx);
+
+    // Add task survey
+
     // Add raw data survey
     addRawData(nestedList, control, publication_idx, study_idx);
     
-    // Add measurement survey
-    addMeasurement(nestedList, control, publication_idx, study_idx);
 }
 
 function initializeStudySurvey(control, publication_idx, study_idx) {
