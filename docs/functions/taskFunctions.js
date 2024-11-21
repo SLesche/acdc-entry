@@ -106,10 +106,44 @@ function initializeTaskSurvey(control, task_idx) {
     <div class="display-text">
         <h1>${task_name}</h1>
         <p>In this section, please provide information about tasks <strong>${task_name}</strong>.</p>
+        <form id="taskSurvey" class = "survey-form">
+            <label for="task_name" class="survey-label">What was the name of the task you employed?</label>
+            <div class="radio-buttons" id = "task_name">
+                <input type="radio" id="flanker" name="task_name" value="flanker" ${task_data.task_name === 'flanker' ? 'checked' : ''}>
+                <label for="flanker">Flanker Task</label>
+                <input type="radio" id="stroop" name="task_name" value="stroop" ${task_data.task_name === 'stroop' ? 'checked' : ''}>
+                <label for="stroop">Stroop Task</label>
+                <input type="radio" id="simon" name="task_name" value="simon" ${task_data.task_name === 'simon' ? 'checked' : ''}>
+                <label for="simon">Simon Task</label>
+                <input type="radio" id="other" name="task_name" value="other" ${task_data.task_name === 'other' ? 'checked' : ''}>
+                <label for="other">Other</label><br>
+            </div>
 
+            <fieldset id="other_task_name_fieldset" ${task_data.task_name === 'other' ? '' : 'disabled'}>
+                <div class="form-item">
+                    <label for="task_name_details" class="survey-label">Provide a short name of the task you used:</label>
+                    <input type="text" id="task_name_details" name="task_name_details" value="${task_data.task_name_details || ''}"/>
+                </div>
+            </fieldset>
 
+            <label for="task_description" class = "survey-label">Task Description:</label>
+            <input type="text" id="task_description" name="task_description" value="${task_data.task_description || ''}"><br>
+            
+            <button type="submit" class="survey-button">Submit</button>
+        </form>
     </div>
     `;
+
+    document.querySelectorAll('input[name="task_name"]').forEach((elem) => {
+        elem.addEventListener("change", function(event) {
+            const fieldset = document.getElementById("other_task_name_fieldset");
+            if (event.target.value == "other") {
+                fieldset.disabled = false;
+            } else {
+                fieldset.disabled = true;
+            }
+        });
+    });
 
     // Add event listener to the form's submit button
     document.getElementById('taskSurvey').addEventListener('submit', async function(event) {
@@ -120,23 +154,47 @@ function initializeTaskSurvey(control, task_idx) {
             updateTaskSurvey(control, task_idx);
         }
     });
-
 }
 
 function collectTaskData() {
-    
+    const task_name = getRadioButtonSelection('task_name');
+    const task_description = document.getElementById('task_description').value;
+    const task_name_details = task_name == "other" ? document.getElementById('task_name_details').value : '';
+
+    const task_data = {
+        task_name,
+        task_description,
+        task_name_details
+    };
+    return task_data;
 }
 
-function validateTaskData(task_data){
+function validateTaskData(task_data) {
     clearValidationMessages();
-    
-    var alert_message = 'This field does not match validation criteria.';
 
-    
+    var alert_message = 'This field does not match validation criteria.';
+    // Check if any of the fields are empty
+
+    var required_keys = [
+        'task_name', 'task_description',
+    ];
+
+    if (task_data.task_name === 'other') {
+        required_keys.push('task_name_details');
+    }
+
+    for (const key of required_keys) {
+        if (!task_data[key]) {
+            alert_message = 'This field is required.';
+            displayValidationError(key, alert_message);
+            return false;
+        }
+    }
+
     return true;
 }
 
-async function updateTaskSurvey(control, task_idx) {
+function updateTaskSurvey(control, task_idx) {
     const task_data = collectTaskData();
 
     task_data.validated = true;
