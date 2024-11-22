@@ -11,6 +11,7 @@ function setupStudyInfo(study_name){
 function setupDatasetInfo(dataset_id){
     dataset_info = {
         dataset_id: dataset_id,
+        dataset_data: {},
         raw_data: {},
         within_data: {},
         task_data: {},

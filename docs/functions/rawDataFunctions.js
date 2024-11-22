@@ -1,63 +1,32 @@
-function addRawData(parentElement, control, publication_idx, study_idx) {
-    // Create a new list item for the dataset
-    const dataset_idx = getNewId(control.publication_info[publication_idx].study_info[study_idx].dataset_info);
-    const dataset_name = "Raw Data " + (dataset_idx + 1);
-    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx] = setupDatasetInfo(dataset_idx);
-
+function addRawData(parentElement, control, publication_idx, study_idx, dataset_idx) {
+    // Create a new list item for the raw data
     const listItem = document.createElement("li");
-    listItem.className = "collapsible";
+    listItem.className = "collapsible-nocontent";
     listItem.dataset.index = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     listItem.id = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
 
-
-    // Create a span for the dataset name
+    // Create a span for the raw data name
     const span = document.createElement("span");
-    span.textContent = dataset_name;
-
-    // Create action buttons
-    const actions = document.createElement("div");
-    actions.className = "actions";
-
-    const removeButton = document.createElement("button");
-    removeButton.innerHTML = '&times;'; // Red X
-    removeButton.classList.add('delete-button');
-    removeButton.onclick = function(event) {
-        event.stopPropagation();
-        removeItem(listItem, control);
-    };
-    actions.appendChild(removeButton);
+    span.textContent = "Raw Data";
 
     // Append the span and actions to the list item
     listItem.appendChild(span);
-    listItem.appendChild(actions);
+    // listItem.appendChild(actions);
 
     // Create a nested list for raw data
     const nestedList = document.createElement("ul");
-    nestedList.className = "nested";
 
-    // Append the nested list to the study item
+    // Append the nested list to the dataset item
     listItem.appendChild(nestedList);
 
     // Append the new list item to the parent element
     parentElement.appendChild(listItem);
 
-    // Add collapsible functionality
-    listItem.addEventListener("click", function(event) {
-        if (event.target === this) {
-            this.classList.toggle("active");
-        }
-    });
-    // Toggle the collapsible on by default
-    listItem.classList.add("active");
-
     // Update content area
-    span.addEventListener("click", function(event) {
-        event.stopPropagation(); // Prevent the collapsible toggle
+    listItem.addEventListener("click", function(event) {
+        event.stopPropagation(); // Prevent any default action
         initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx);
     });
-
-    // Add raw data survey
-    addWithinData(nestedList, control, publication_idx, study_idx, dataset_idx);
 }
 
 function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {
@@ -208,22 +177,12 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 <p id = "textUploadPreview" style = "display: none;">Uploaded file preview:</p>
                 <div id="tableContainerUploaded" class = "table-container" style = "display: none;">
                 </div>
-
-                <label for="task_name" class="survey-label">Select the task used:</label>
-                <select id="task_name" name="task_name">
-                    <option value="">Select a task</option>
-                    <!-- Options will be populated dynamically -->
-                </select><br>
-                <p class="survey-label-additional-info">Navigate to "Task" in the side-panel and add a task if you do not see your task here.</p>
-
                 <button type="submit" class="survey-button">Submit</button>
             </form>
 
         </form>
     </div>
     `;
-
-    populateTaskOptions(control, publication_idx, study_idx);
 
     if (raw_data.validated) {
         const rows_to_display = 6;
@@ -295,7 +254,7 @@ async function collectRawData() {
     }
 }
 
-function validateRawData(raw_data, control, publication_idx, study_idx) {
+function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
     var alert_message = '';
 
     if (!raw_data.raw_data_file) {
@@ -311,21 +270,21 @@ function validateRawData(raw_data, control, publication_idx, study_idx) {
 
 function checkOtherSubmissions(control, publication_idx, study_idx) {
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
-    const statementset_name = study_info.study_data.statementset_name;
+    const task_name = study_info.study_data.task_name;
 
     // Example usage:
-    const statementset_index = getStatementSetIndex(statementset_name);
+    const task_index = getStatementSetIndex(task_name);
 
     // if index is null, return false
-    if (statementset_index === null && statementset_name !== "no information") {
-        var statementset_validated = false;
-    } else if (statementset_name === "no information") {
-        var statementset_validated = true;
+    if (task_index === null && task_name !== "no information") {
+        var task_validated = false;
+    } else if (task_name === "no information") {
+        var task_validated = true;
     } else {
-        var statementset_validated = control.statementset_info[statementset_index].statementset_data.validated;
+        var task_validated = control.task_info[task_index].task_data.validated;
     }
     
-    if (!statementset_validated || !study_info.condition_data.validated || !study_info.repetition_data.validated || !study_info.study_data.validated) {
+    if (!task_validated || !study_info.condition_data.validated || !study_info.repetition_data.validated || !study_info.study_data.validated) {
         // Display which sections are missing
         if (!study_info.study_data.validated) {
             alert('Please enter information about the overall study before submitting the raw data.')
@@ -339,7 +298,7 @@ function checkOtherSubmissions(control, publication_idx, study_idx) {
             alert('Please enter information about the statement presentations before submitting the raw data.')
             return false;
         }
-        if (!statementset_validated) {
+        if (!task_validated) {
             alert('Please enter information about the statement set before submitting the raw data.');
             return false;
         }
@@ -350,16 +309,16 @@ function checkOtherSubmissions(control, publication_idx, study_idx) {
 async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {
     raw_data = await collectRawData();
 
-    raw_data.validated = true;
-
     // Store the values in the control object
-    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data = raw_data
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.data = raw_data.data;
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.raw_data_file = raw_data.raw_data_file;
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.validated = true;
 
     // Optionally, display a confirmation message
     alert('Survey submitted successfully!');
 
     // Add a checkmark to the currently selected sidebar item
-    const item_id =  "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+    const item_id =  "datainfo-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     addGreenCheckmarkById(item_id);
 
     const rows_to_display = 6;
@@ -369,40 +328,4 @@ async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_
     document.getElementById('tableContainerUploaded').innerHTML = html_table;
     document.getElementById('tableContainerUploaded').style.display = 'block';
     document.getElementById('textUploadPreview').style.display = 'block';
-}
-
-function populateTaskOptions(control, publication_idx, study_idx) {
-    const taskSelect = document.getElementById('task_name');
-    
-    const study_data = control.publication_info[publication_idx].study_info[study_idx].study_data;
-
-    // Clear existing options
-    taskSelect.innerHTML = '';
-
-    // Add a default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Select a task';
-    taskSelect.appendChild(defaultOption);
-
-    // // Add the option that they do not have a statement set	
-    // const noTaskOption = document.createElement('option');
-    // noTaskOption.value = 'no information';
-    // noTaskOption.textContent = 'No available information on the statements.';
-    // taskSelect.appendChild(noTaskOption);
-
-    // Populate the drop-down with statement sets
-    for (const key in control.task_info) {
-        const option = document.createElement('option');
-        option.value = control.task_info[key].task_name;
-        option.textContent = control.task_info[key].task_name;
-        taskSelect.appendChild(option);
-    }
-
-    // Set the default value
-    if (study_data.task_name) {
-        taskSelect.value = study_data.task_name;
-    } else {
-        taskSelect.value = ''; // Default to "Select a task" option
-    }
 }
