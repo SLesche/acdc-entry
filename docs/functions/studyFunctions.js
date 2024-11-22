@@ -74,7 +74,7 @@ function addStudy(parentElement, control, publication_idx) {
     // Add task survey
 
     // Add raw data survey
-    addRawData(nestedList, control, publication_idx, study_idx);
+    addData(nestedList, control, publication_idx, study_idx);
     
 }
 
@@ -96,6 +96,9 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
             <label for="n_tasks" class = "survey-label">How many tasks did you use in this study?</label>
             <input type="number" id="n_tasks" name="n_tasks" value="${study_data.n_tasks || ''}"><br>
 
+            <label for="study_comment" class = "survey-label">Please provide a short description of the study (1-2 sentences): What was investigated? How was it studied?</label>
+            <input type="text" id="study_comment" name="study_comment" value="${study_data.study_comment || ''}"><br>
+
             <button type="submit" class="survey-button">Submit</button>
         </form>
     </div>
@@ -112,8 +115,13 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
 
 function collectStudyData() {
     const n_groups = document.getElementById('n_groups').value;
+    const n_tasks = document.getElementById('n_tasks').value;
+    const study_comment = document.getElementById('study_comment').value;
+
     const study_data = {
         n_groups: n_groups,
+        n_tasks: n_tasks,
+        study_comment: study_comment,
     }
     
     return study_data;
@@ -125,7 +133,7 @@ function validateStudyData(study_data) {
     var alert_message = 'This field does not match validation criteria.';
     // Check if any of the fields are empty
 
-    var required_keys = ['n_groups'];
+    var required_keys = ['n_groups', 'n_tasks', 'study_comment'];
 
     for (const key of required_keys) {
         if (!study_data[key]) {
