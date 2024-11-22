@@ -209,12 +209,21 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 <div id="tableContainerUploaded" class = "table-container" style = "display: none;">
                 </div>
 
+                <label for="task_name" class="survey-label">Select the task used:</label>
+                <select id="task_name" name="task_name">
+                    <option value="">Select a task</option>
+                    <!-- Options will be populated dynamically -->
+                </select><br>
+                <p class="survey-label-additional-info">Navigate to "Task" in the side-panel and add a task if you do not see your task here.</p>
+
                 <button type="submit" class="survey-button">Submit</button>
             </form>
 
         </form>
     </div>
     `;
+
+    populateTaskOptions(control, publication_idx, study_idx);
 
     if (raw_data.validated) {
         const rows_to_display = 6;
@@ -360,4 +369,40 @@ async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_
     document.getElementById('tableContainerUploaded').innerHTML = html_table;
     document.getElementById('tableContainerUploaded').style.display = 'block';
     document.getElementById('textUploadPreview').style.display = 'block';
+}
+
+function populateTaskOptions(control, publication_idx, study_idx) {
+    const taskSelect = document.getElementById('task_name');
+    
+    const study_data = control.publication_info[publication_idx].study_info[study_idx].study_data;
+
+    // Clear existing options
+    taskSelect.innerHTML = '';
+
+    // Add a default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = 'Select a task';
+    taskSelect.appendChild(defaultOption);
+
+    // // Add the option that they do not have a statement set	
+    // const noTaskOption = document.createElement('option');
+    // noTaskOption.value = 'no information';
+    // noTaskOption.textContent = 'No available information on the statements.';
+    // taskSelect.appendChild(noTaskOption);
+
+    // Populate the drop-down with statement sets
+    for (const key in control.task_info) {
+        const option = document.createElement('option');
+        option.value = control.task_info[key].task_name;
+        option.textContent = control.task_info[key].task_name;
+        taskSelect.appendChild(option);
+    }
+
+    // Set the default value
+    if (study_data.task_name) {
+        taskSelect.value = study_data.task_name;
+    } else {
+        taskSelect.value = ''; // Default to "Select a task" option
+    }
 }

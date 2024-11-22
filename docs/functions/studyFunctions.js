@@ -90,7 +90,13 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
         <p>This information is crucial for ensuring that your study is well-documented and can be effectively integrated into our database. Thank you for taking the time to provide these details.</p>
 
         <form id="studySurvey" class="survey-form">
-           
+            <label for="n_groups" class = "survey-label">How many between-subject groups are present in this study?</label>
+            <input type="number" id="n_groups" name="n_groups" value="${study_data.n_groups || ''}"><br>
+            
+            <label for="n_tasks" class = "survey-label">How many tasks did you use in this study?</label>
+            <input type="number" id="n_tasks" name="n_tasks" value="${study_data.n_tasks || ''}"><br>
+
+            <button type="submit" class="survey-button">Submit</button>
         </form>
     </div>
     `;
@@ -105,7 +111,9 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
 }
 
 function collectStudyData() {
+    const n_groups = document.getElementById('n_groups').value;
     const study_data = {
+        n_groups: n_groups,
     }
     
     return study_data;
@@ -117,7 +125,7 @@ function validateStudyData(study_data) {
     var alert_message = 'This field does not match validation criteria.';
     // Check if any of the fields are empty
 
-    var required_keys = [];
+    var required_keys = ['n_groups'];
 
     for (const key of required_keys) {
         if (!study_data[key]) {
