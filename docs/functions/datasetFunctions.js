@@ -164,11 +164,18 @@ function collectDatasetSurvey() {
     return dataset_data;
 }
 
-function validateDataInfo(dataset_data, control, publication_idx, study_idx) {
+function validateDataInfo(dataset_data) {
     var alert_message = '';
  
-    var required_headers = ['subject', 'presentation_identifier', 'trial', 'response', 'repeated'];
+    var required_keys = ['task_name', 'n_participants', 'group_description', 'mean_age', 'percentage_female', 'n_blocks', 'n_trials', 'neutral_trials', 'fixation_cross', 'time_limit'];
 
+    for (const key of required_keys) {
+        if (!dataset_data[key]) {
+            alert_message = 'This field is required.';
+            displayValidationError(key, alert_message);
+            return false;
+        }
+    }
     return true;
 }
 
