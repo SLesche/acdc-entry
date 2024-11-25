@@ -47,125 +47,59 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
             <p>Below, you can find an example of how your data should be formatted. Please follow this format to ensure compatibility and ease of use:</p>
             <ul class = "list-of-entries">
                 <li><strong>subject:</strong> A unique identifier for each subject.</li>
-                <li><strong>presentation_identifier:</strong> A unique identifier for each presentation condition. This must be one of the identifiers encoded in "Statement Presentations".</li>
+                <li><strong>block:</strong> A unique identifier for each block for a given subject.</li>
                 <li><strong>trial:</strong> A unique identifier for each trial for a given subject.</li>
-                <li><strong>within_identifier:</strong> A unique identifier for a within subject conditions. This must be one of the identifiers encoded in "Experimental Conditions".</li>
-                <li><strong>between_identifier:</strong> A unique identifier for a between subject conditions. This must be one of the identifiers encoded in "Experimental Conditions".</li>
-                <li><strong>statement_identifier:</strong> A unique identifier for each statement used. This must be one of the identifiers encoded in the "Statementset" data you uploaded.</li>
-                <li><strong>response:</strong> The value of the truth rating. <b>Larger values must indicate higher truth ratings.</b></li>
-                <li><strong>repeated:</strong> The value indicating whether a statement was repeated "1" or not "0".</li>
-                <li><strong>certainty:</strong> (if measured) The value indicating the subjective certainty with which a participant gave their truth rating.</li>
-                <li><strong>rt:</strong> (if measured) The value indicating the response time <b>in seconds</b>.</li>
+                <li><strong>within_identifier:</strong> A unique identifier for a within subject conditions. This must be one of the identifiers encoded in "Within Conditions".</li>
+                <li><strong>congruency:</strong> The value indicating the congruency condition. Must be "congruent", "incongruent", or "neutral".</li>
+                <li><strong>accuracy:</strong> The value indicating the accuracy of the response "1" for correct and "0" for incorrect.</li>
+                <li><strong>rt:</strong> The value indicating the response time <b>in seconds</b>.</li>
             </ul>
             <div class = "table-container" id = "tableContainerExample">
                 <table>
                     <tr>
                         <th>subject</th>
-                        <th>presentation_identifier</th>
+                        <th>block</th>
                         <th>trial</th>
                         <th>within_identifier</th>
-                        <th>between_identifier</th>
-                        <th>statement_identifier</th>
+                        <th>congruency</th>
+                        <th>accuracy</th>
                         <th>rt</th>
-                        <th>response</th>
-                        <th>repeated</th>
-                        <th>certainty</th>
                     </tr>
                     <tr>
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
                         <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>0.64</td>
-                        <td><i>NA</i></td>
+                        <td>congruent</td>
                         <td>0</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>0.75</td>
-                        <td>7</td>
-                        <td>1</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>0.75</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>0.76</td>
-                        <td>5</td>
-                        <td>1</td>
-                        <td>6</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>1</td>
                         <td>0.64</td>
-                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>incongruent</td>
+                        <td>1</td>
+                        <td>0.75</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>congruent</td>
+                        <td>1</td>
+                        <td>0.75</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>congruent</td>
                         <td>0</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>0.75</td>
-                        <td>7</td>
-                        <td>1</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>1</td>
-                        <td>0.75</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>3</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>2</td>
-                        <td>0.76</td>
-                        <td>5</td>
-                        <td>1</td>
-                        <td>6</td>
+                        <td>0.81</td>
                     </tr>
                 </table>
             </div>         
@@ -215,7 +149,7 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
 
     document.getElementById('rawDataSurvey').addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent default form submission
-        const allow_submission = checkOtherSubmissions(control, publication_idx, study_idx);
+        const allow_submission = checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx);
         if (allow_submission) {
             const collected_data = await collectRawData();
             if (validateRawData(collected_data, control, publication_idx, study_idx) || control.testing){
@@ -262,8 +196,83 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
         displayValidationError('raw_data_file', alert_message);
         return false;
     }
- 
-    var required_headers = ['subject', 'presentation_identifier', 'trial', 'response', 'repeated'];
+    
+    const study_info = control.publication_info[publication_idx].study_info[study_idx];
+    var required_headers = ['subject', 'block', 'trial', 'congruency', 'acc', 'rt'];
+
+    if (!study_info.dataset_info[dataset_idx].within_data.has_within_conditions == 1){
+        required_headers.push('within_identifier')
+    }
+
+    // Check if all required headers are present
+    const data_columns = Object.keys(raw_data.data[0]);
+
+    const missing_headers = required_headers.filter(header => !data_columns.includes(header));
+    if (missing_headers.length > 0) {
+        alert_message = `The following columns are missing from the uploaded file: ${missing_headers.join(', ')}.`;
+        displayValidationError('raw_data_file', alert_message);
+        return false;
+    }
+
+    // check for unknown columns
+    const unknown_columns = data_columns.filter(header => !required_headers.includes(header));
+    if (unknown_columns.length > 0) {
+        alert_message = `The uploaded file contains unknown columns: ${unknown_columns.join(', ')}`;
+        displayWarningMessage('raw_data_file', alert_message);
+    }
+
+    // if there were experimental conditions, check that all identifiers are present in the experimental conditions
+    if (study_info.dataset_info[dataset_idx].within_data.has_within_conditions == 1) {
+        const within_identifiers = [...new Set(raw_data.data.map(row => row.within_identifier).filter(identifier => identifier !== 'NA'))].map(String);
+
+        // Check for missing within-subject condition identifiers
+        const reported_within_identifiers = study_info.dataset_info[dataset_idx].within_data.within_condition_details.map(detail => detail.identifier);
+        const missing_within_identifiers = reported_within_identifiers.filter(identifier => !within_identifiers.includes(identifier));
+        
+        // Check for extra within-subject condition identifiers
+        const extra_within_identifiers = within_identifiers.filter(identifier => !reported_within_identifiers.includes(identifier));
+
+        let alert_messages = [];
+
+        if (missing_within_identifiers.length > 0) {
+            alert_messages.push(`The following within-subject condition identifiers are missing from the uploaded file: ${missing_within_identifiers.join(', ')}.`);
+        }
+
+        if (extra_within_identifiers.length > 0) {
+            alert_messages.push(`The following within-subject condition identifiers in the uploaded file were not previously added to the experimental conditions: ${extra_within_identifiers.join(', ')}.`);
+        }
+
+        if (alert_messages.length > 0) {
+            displayValidationError('raw_data_file', alert_messages.join(' '));
+            return false;
+        }
+    }
+
+    const rts = raw_data.data.map(row => row.rt).filter(rt => rt !== 'NA');
+    const average_rt = rts.reduce((a, b) => a + b) / rts.length;
+
+    if (average_rt > 100) {
+        alert_message = 'The average response time in the uploaded file is above 100. Please check if the data is in seconds.';
+        displayWarningMessage('raw_data_file', alert_message);
+    }
+
+    // Check that accuracy is only 0, 1 or NA
+    const accuracy_vals = raw_data.data.map(row => row.accuracy);
+    const invalid_accuracy_vals = accuracy_vals.filter(val => val != '0' && val != '1' && val !== 'NA');
+    if (invalid_accuracy_vals.length > 0) {
+        alert_message = `The "accuracy" column contains invalid values: ${invalid_accuracy_vals.slice(0, 5).join(', ')}. It should only contain "0", "1", or "NA".`;
+        displayValidationError('raw_data_file', alert_message);
+        return false;
+    }
+
+    // Check that congruency is only congruent, incongruent, neutral, or NA
+    const congruency_vals = raw_data.data.map(row => row.accuracy);
+    const invalid_congruency_vals = congruency_vals.filter(val => val != 'congruent' && val != 'incongruent' && val!= 'neutral' && val !== 'NA');
+    if (invalid_congruency_vals.length > 0) {
+        alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "0", "1", or "NA".`;
+        displayValidationError('raw_data_file', alert_message);
+        return false;
+    }
 
     return true;
 }
@@ -271,7 +280,7 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
 function checkOtherSubmissions(control, publication_idx, study_idx) {
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
     const task_name = study_info.study_data.task_name;
-
+    const dataset_info = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx];
     // Example usage:
     const task_index = getStatementSetIndex(task_name);
 
@@ -284,22 +293,22 @@ function checkOtherSubmissions(control, publication_idx, study_idx) {
         var task_validated = control.task_info[task_index].task_data.validated;
     }
     
-    if (!task_validated || !study_info.condition_data.validated || !study_info.repetition_data.validated || !study_info.study_data.validated) {
+    if (!task_validated || !dataset_info.within_data.validated || !study_info.study_data.validated || !dataset_info.dataset_data) {
         // Display which sections are missing
         if (!study_info.study_data.validated) {
             alert('Please enter information about the overall study before submitting the raw data.')
             return false;
         }
-        if (!study_info.condition_data.validated) {
-            alert('Please enter information about the experimental conditions before submitting the raw data.');
+        if (!dataset_info.within.validated) {
+            alert('Please enter information about the within conditions before submitting the raw data.');
             return false;
         }
-        if (!study_info.repetition_data.validated) {
-            alert('Please enter information about the statement presentations before submitting the raw data.')
+        if (!dataset_info.dataset_data.validated) {
+            alert('Please enter information about the dataset before submitting the raw data.')
             return false;
         }
         if (!task_validated) {
-            alert('Please enter information about the statement set before submitting the raw data.');
+            alert('Please enter information about the task before submitting the raw data.');
             return false;
         }
     }
