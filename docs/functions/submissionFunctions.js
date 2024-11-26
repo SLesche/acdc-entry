@@ -2,7 +2,7 @@ function cleanDataForSubmission(control) {
     var cleaned_control = {
         publication_data: {},
         study_info: {},
-        statementset_info: {},
+        task_info: {},
     };
 
     // Copy publication data, exclude the validated field 
@@ -10,31 +10,38 @@ function cleanDataForSubmission(control) {
     cleaned_control.publication_data = publication_data;
     
     // Iterate over statementsets
-    for (let statementset_idx in control.statementset_info) {
-        const statementset_data = control.statementset_info[statementset_idx].statementset_data.statement_publication_data;
-        const statementset_publication = control.statementset_info[statementset_idx].statementset_data.statement_publication;
-        cleaned_control.statementset_info[statementset_idx] = { 
-            statementset_data,
-            statementset_publication
+    for (let task_idx in control.task_info) {
+        const task_info = control.task_info[task_idx]
+        cleaned_control.task_info[task_idx] = { 
+            task_info
         };
     }
 
     // Iterate over studies
     for (let study_idx in control.publication_info[0].study_info) {
         const study_info = control.publication_info[0].study_info[study_idx];
+
         const { validated: study_validated, ...study_data } = study_info.study_data;
-        const { validated: repetition_validated, ...repetition_data } = study_info.repetition_data;
-        const { validated: conditions_validated, ...condition_data } = study_info.condition_data;
         const { validated: measurement_validated, ...measurement_data } = study_info.measurement_data;
-        const raw_data = study_info.raw_data.data;
 
         cleaned_control.study_info[study_idx] = {
             study_data,
-            repetition_data,
-            condition_data,
             measurement_data,
-            raw_data
+            dataset_info: {},
         };
+
+        for (let dataset_idx in control.publication_info[0].study_info[study_idx].dataset_info) {
+            const dataset_info = control.publication_info[0].study_info[study_idx].dataset_info[dataset_idx];
+            const { validated: dataset_validated, ...dataset_data } = dataset_info.dataset_data;
+            const { validated: within_validated, ...within_data } = dataset_info.within_data;
+            const raw_data = dataset_info.raw_data.data;
+
+            cleaned_control.study_info[study_idx].dataset_info[dataset_idx] = {
+                dataset_data,
+                within_data,
+                raw_data
+            }
+        }
     }
     
     return cleaned_control
@@ -83,7 +90,7 @@ function saveProgress(control){
 
 function addCheckmarksFromProgress(control) {
     const num_total_publications = Object.keys(control.publication_info).length;
-    const num_statement_sets = Object.keys(control.statementset_info).length;
+    const num_tasks = Object.keys(control.task_info).length;
 
     for (let publication_idx in control.publication_info) {
         let publication = control.publication_info[publication_idx];
@@ -103,29 +110,35 @@ function addCheckmarksFromProgress(control) {
                 addGreenCheckmarkById(item_id);
             }
 
-            // Add checkmarks for repetition data
-            if (study.repetition_data.validated) {
-                addGreenCheckmarkById(`repetitions-${publication_idx}-${study_idx}`);
-            }
-
             if (study.measurement_data.validated) {
                 addGreenCheckmarkById(`measures-${publication_idx}-${study_idx}`);
             }
 
-            if (study.raw_data.validated) {
-                addGreenCheckmarkById(`rawdata-${publication_idx}-${study_idx}`);
-            }
+            for (let dataset_idx in control.publication_info[publication_idx].study_info[study_idx].dataset_info){
+                let dataset = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx];
 
-            if (study.condition_data.validated) {
-                addGreenCheckmarkById(`conditions-${publication_idx}-${study_idx}`);
+                if (dataset.dataset_data.validated){
+                    const item_id = "datainfo-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+                    addGreenCheckmarkById(item_id);
+                }
+
+                if (dataset.within_data.validated){
+                    const item_id = "conditions-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+                    addGreenCheckmarkById(item_id);
+                }
+
+                if (dataset.raw_data.validated){
+                    const item_id = "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+                    addGreenCheckmarkById(item_id);
+                }
             }
         }
     }
 
     // Iterate over statement sets
-    for (let statementset_idx = 0; statementset_idx < num_statement_sets; statementset_idx++) {
-        if (control.statementset_info[statementset_idx].statementset_data.validated) {
-            addGreenCheckmarkById(`statementset-${statementset_idx}`);
+    for (let task_idx = 0; task_idx < num_tasks; task_idx++) {
+        if (control.task_info[task_idx].task_data.validated) {
+            addGreenCheckmarkById(`task-${task_idx}`);
         }
     }
 }

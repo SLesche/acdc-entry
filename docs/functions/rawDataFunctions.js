@@ -152,7 +152,7 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
         const allow_submission = checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx);
         if (allow_submission) {
             const collected_data = await collectRawData();
-            if (validateRawData(collected_data, control, publication_idx, study_idx) || control.testing){
+            if (validateRawDataFile(collected_data, control, publication_idx, study_idx, dataset_idx) || control.testing){
                 updateRawDataSurvey(control, publication_idx, study_idx, dataset_idx);
             }
         }
@@ -188,7 +188,7 @@ async function collectRawData() {
     }
 }
 
-function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
+function validateRawDataFile(raw_data, control, publication_idx, study_idx, dataset_idx) {
     var alert_message = '';
 
     if (!raw_data.raw_data_file) {
@@ -198,7 +198,7 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
     }
     
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
-    var required_headers = ['subject', 'block', 'trial', 'congruency', 'acc', 'rt'];
+    var required_headers = ['subject', 'block', 'trial', 'congruency', 'accuracy', 'rt'];
 
     if (!study_info.dataset_info[dataset_idx].within_data.has_within_conditions == 1){
         required_headers.push('within_identifier')
@@ -266,7 +266,7 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
     }
 
     // Check that congruency is only congruent, incongruent, neutral, or NA
-    const congruency_vals = raw_data.data.map(row => row.accuracy);
+    const congruency_vals = raw_data.data.map(row => row.congruency);
     const invalid_congruency_vals = congruency_vals.filter(val => val != 'congruent' && val != 'incongruent' && val!= 'neutral' && val !== 'NA');
     if (invalid_congruency_vals.length > 0) {
         alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "0", "1", or "NA".`;
@@ -277,11 +277,10 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx) {
     return true;
 }
 
-function checkOtherSubmissions(control, publication_idx, study_idx) {
+function checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx) {
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
-    const task_name = study_info.study_data.task_name;
     const dataset_info = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx];
-    // Example usage:
+    const task_name = dataset_info.dataset_data.task_name;
     const task_index = getStatementSetIndex(task_name);
 
     // if index is null, return false
@@ -299,7 +298,7 @@ function checkOtherSubmissions(control, publication_idx, study_idx) {
             alert('Please enter information about the overall study before submitting the raw data.')
             return false;
         }
-        if (!dataset_info.within.validated) {
+        if (!dataset_info.within_data.validated) {
             alert('Please enter information about the within conditions before submitting the raw data.');
             return false;
         }
@@ -327,7 +326,7 @@ async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_
     alert('Survey submitted successfully!');
 
     // Add a checkmark to the currently selected sidebar item
-    const item_id =  "datainfo-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+    const item_id =  "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
     addGreenCheckmarkById(item_id);
 
     const rows_to_display = 6;
