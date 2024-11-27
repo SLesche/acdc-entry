@@ -3,70 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Entry Form</title>
-    <script src = "functions/helperFunctions.js"></script>
-    <script src = "functions/publicationFunctions.js"></script>
-    <script src = "functions/studyFunctions.js"></script>
-    <script src = "functions/conditionFunctions.js"></script>
-    <script src = "functions/measurementFunctions.js"></script>
-    <script src = "functions/taskFunctions.js"></script>
-    <script src = "functions/rawDataFunctions.js"></script>
-    <script src = "functions/datasetFunctions.js"></script>
-    <script src = "functions/overviewFunctions.js"></script>
-    <script src = "functions/modifyItem.js"></script>
-    <script src = "functions/setupObjects.js"></script>
-    <script src = "functions/submissionFunctions.js"></script>
-    <script src = "https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    <title>Welcome</title>
     <link rel="stylesheet" href="styles/color.css">
     <link rel="stylesheet" href="styles/documentStyles.css">
     <link rel="stylesheet" href="styles/buttonStyles.css">
     <link rel="stylesheet" href="styles/surveyStyles.css">
 </head>
 <body>
-    <button id="toggleSidebarButton" class="toggle-button">☰</button>
-
-    <div id="sidebar" class="sidebar">
-        <div class="button-container">
-            <button onclick="generateOverviewPage(control)" class="add-button">Overview</button>
-            <!-- <button onclick="addStatementSet(control)" class="add-button">Add a set of Statements</button> -->
-        </div>
-        <ul id="sidebarList">
-            <!-- Sidebar elements will be dynamically added here -->
-        </ul>
-    </div>
-   
-    <div class="content" id="content">
-        <!-- Content will be dynamically updated here -->
-        <h2>Welcome</h2>
-        <p>Select an item from the sidebar to see details.</p>
-    </div>
-
-    <script>
-        // Initialize control object
-        var control = {
-            publication_info: {},
-            task_info: {},
-            testing: false,
-        };
-
-        // Toggle sidebar visibility
-        document.getElementById('toggleSidebarButton').onclick = function() {
-            const sidebar = document.getElementById('sidebar');
-            const content = document.getElementById('content');
-            const toggleButton = document.getElementById('toggleSidebarButton');
-            sidebar.classList.toggle('hidden');
-            content.classList.toggle('expanded');
-            toggleButton.classList.toggle('moved');
-        };
-
-        // setup publication
-        addPublication(control);
-
-        //setup statement set
-        addTaskOverview(control);
-
-        // Load the overview page
-        generateOverviewPage(control);
-    </script>
+    <header>
+        <h1> Welcome! </h1>
+        <nav>
+            <ul>
+                <li><a href="data-submission/index.html">Submit Data</a></li>
+                <!-- <li><a href="data-overview/index.html">Data Overview</a></li> -->
+            </ul>
+        </nav>
+    </header>
 </body>
 </html>
