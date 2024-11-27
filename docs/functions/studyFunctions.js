@@ -41,7 +41,7 @@ function addStudy(parentElement, control, publication_idx) {
     addDatasetButton.className = "menu-button";
     addDatasetButton.textContent = "+ Add Dataset";
     addDatasetButton.onclick = function() {
-        addRawData(nestedList, control, publication_idx, study_idx);
+        addData(nestedList, control, publication_idx, study_idx);
     };
     addDatasetListItem.appendChild(addDatasetButton);
     
