@@ -158,24 +158,24 @@ nav {
 
 .nav-links a {
     padding: 8px 15px;
-    color: #fff;
+    color: var(--light-text-color);
     transition: background-color 0.3s ease-in-out;
     border-radius: 5px;
 }
 
 .nav-links a:hover {
-    background-color: #555;
+    background-color: var(--dark-hover-color);
 }
 
 .submit-btn {
-    background-color: #f39c12;
-    color: #fff;
+    background-color: var(--special-button-color);
+    color: var(--light-text-color);
     font-weight: bold;
     border-radius: 5px;
 }
 
 .submit-btn:hover {
-    background-color: #e67e22;
+    background-color:var(--special-button-hover);
 }
 
 /* Section Styles */
@@ -188,7 +188,7 @@ main {
 .section {
     padding: 50px 20px;
     margin-bottom: 20px;
-    background-color: #f9f9f9;
+    background-color: var(--section-background-color);
     border: 1px solid #ddd;
     border-radius: 10px;
     text-align: center;

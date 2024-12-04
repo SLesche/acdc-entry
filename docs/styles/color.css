@@ -1,5 +1,8 @@
 :root {
     --default-background-color: #f7fcfc;
+    --section-background-color: rgb(205, 205, 205);
+    --dark-default-background-color: rgb(205, 205, 205);
+    --dark-hover-color: black;
     --text-background-color:#f7fcfc;
     --sidebar-background-color: rgb(205, 205, 205);
     --form-background-color: #f7fcfc;
@@ -11,7 +14,10 @@
     --submit-button-color: black;
     --submit-button-background: forestgreen;
     --text-color: black;
+    --light-text-color: white;
     --table-header-background-color: rgb(205, 205, 205);
     --table-even-background-color: #eaeeee;
+    --special-button-color: #f39c12;
+    --special-button-hover: #e67e22;
   }
   
