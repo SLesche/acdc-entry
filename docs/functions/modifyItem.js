@@ -33,12 +33,10 @@ function removeItem(listItem, control) {
             delete control.publication_info[num_idx[0]];
         } else if (type === "study") {
             delete control.publication_info[num_idx[0]].study_info[num_idx[1]];
-        } else if (type === "dataset") {
+        } else if (type === "datainfo") {
             delete control.publication_info[num_idx[0]].study_info[num_idx[1]].dataset_info[num_idx[2]];
-        } else if (type === "measures") {
-            delete control.publication_info[num_idx[0]].study_info[num_idx[1]].measurement_info
-        } else if (type === "statementset") {
-            delete control.statementset_info[num_idx[0]];
+        }  else if (type === "task") {
+            delete control.task_info[num_idx[0]];
         }
 
         listItem.remove();
