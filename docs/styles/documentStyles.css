@@ -195,7 +195,7 @@ main {
     background-color: var(--default-background-color);
     border: 1px solid #ddd;
     border-radius: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .section h1, .section h2 {
@@ -221,17 +221,17 @@ html {
 #publications {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     padding: 20px;
 }
 
 #publications h2 {
     margin-bottom: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .card-container {
-    width: 80%;
+    width: 90%;
     padding: 20px;
     box-sizing: border-box;
 }
