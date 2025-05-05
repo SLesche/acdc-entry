@@ -71,6 +71,7 @@ function addTaskOverview(control) {
     const addTaskListItem = document.createElement("li");
     const addTaskButton = document.createElement("button");
     addTaskButton.className = "menu-button";
+    addTaskButton.id = "addTaskButton";
     addTaskButton.textContent = "+ Add Task";
     addTaskButton.onclick = function() {
         addTask(nestedList, control);

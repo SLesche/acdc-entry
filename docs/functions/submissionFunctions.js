@@ -213,6 +213,8 @@ function validate_submission(control) {
 function initializeNavbarFromProgress(progress) {
     const num_tasks = Object.keys(progress.task_info).length;
 
+    console.log("Initializing navbar from progress file...");
+
     for (let publication_idx in progress.publication_info) {
 
         for (let study_idx in progress.publication_info[publication_idx].study_info) {
@@ -222,6 +224,19 @@ function initializeNavbarFromProgress(progress) {
                 const addStudyButton = document.getElementById("addStudyButton-" + publication_idx);
                 if (addStudyButton) {
                     addStudyButton.click();
+                    console.log("Clicked addStudyButton for publication " + publication_idx);
+                }
+            }
+
+            for (let dataset_idx in progress.publication_info[publication_idx].study_info[study_idx].dataset_info) {
+                // Create the dataset element if it doesn't exist
+                const datasetItemId = "datainfo-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
+                if (!document.getElementById(datasetItemId)) {
+                    const addDatasetButton = document.getElementById("addDatasetButton-" + publication_idx + "-" + study_idx);
+                    if (addDatasetButton) {
+                        addDatasetButton.click();
+                        console.log("Clicked addDatasetButton for study " + study_idx + " in publication " + publication_idx);
+                    }
                 }
             }
         }
@@ -234,6 +249,7 @@ function initializeNavbarFromProgress(progress) {
             const addTaskButton = document.getElementById("addTaskButton");
             if (addTaskButton) {
                 addTaskButton.click();
+                console.log("Clicked addTaskButton for task " + task_idx);
             }
         }
     }

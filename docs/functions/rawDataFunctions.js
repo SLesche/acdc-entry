@@ -201,7 +201,7 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx, data
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
     var required_headers = ['subject', 'block', 'trial', 'congruency', 'accuracy', 'rt'];
 
-    if (!study_info.dataset_info[dataset_idx].within_data.has_within_conditions == 1){
+    if (study_info.dataset_info[dataset_idx].within_data.has_within_conditions == 1){
         required_headers.push('within_identifier')
     }
 

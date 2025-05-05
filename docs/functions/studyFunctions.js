@@ -39,6 +39,7 @@ function addStudy(parentElement, control, publication_idx) {
     const addDatasetListItem = document.createElement("li");
     const addDatasetButton = document.createElement("button");
     addDatasetButton.className = "menu-button";
+    addDatasetButton.id = "addDatasetButton-" + publication_idx + "-" + study_idx;
     addDatasetButton.textContent = "+ Add Dataset";
     addDatasetButton.onclick = function() {
         addData(nestedList, control, publication_idx, study_idx);
