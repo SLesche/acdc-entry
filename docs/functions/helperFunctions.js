@@ -135,7 +135,7 @@ function displayValidationError(questionId, message) {
     }
 
     // Set the message text and color
-    messageElement.textContent = message;
+    messageElement.innerHTML = `<p> ${message}</p>`;
     messageElement.style.color = 'red';
     messageElement.style.marginTop = '5px'; // Optional: Add some margin for better appearance
 }
