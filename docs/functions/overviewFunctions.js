@@ -37,8 +37,6 @@ function generateOverviewPage(control) {
             <p>When you are finished with your data entry, please click on the "Submit Data" button. To save and restore your unsaved work, use the "Save Progress" button.</p>
             <p>After submission, the website will attempt to download 2 files onto your downloads folder. One contains the final submission and the other is a backup of your submission progress. We ask you to send both of them to us via email to <a href="mailto:julia.haaf@uni-potsdam.de">julia.haaf@uni-potsdam.de</a> with the subject "ACDC Submission"</p>
 
-            ${printProgressReport(getNumberOfSubmissions(control))}
-
             <h2>Save / Load progess</h2>
             <button onclick="saveProgress(control)">Save Progress</button>
             <button id="uploadProgressButton">Upload Progress</button>
