@@ -31,7 +31,7 @@ function generateOverviewPage(control) {
         <div class = "display-text">
             <h1>Welcome to the Attentional Control Data Collection (ACDC) Data Submission Page</h1>
             <p>Thank you for contributing to our growing database of attentional control research. By entering your data here, you help make research more accessible and reusable for everyone.</p>
-            <p>You can download the dataset under this link: <a href="https://github.com/jstbcs/acdc-database" target="_blank">Dataset Link</a> and explore the dataset in this <a href="https://mfhcgn.shinyapps.io/acdc-database/" target="_blank">Shiny App</a></p>
+            <p>You can download and explore the dataset under this <a href="https://www.uni-potsdam.de/en/psych-methods/research/attentional-control-data-collection" target="_blank">link</a>.</p>
             <p>On the side, you find a navigation page to enter your data. We recommend you start with "Publication" to provide general information about the publication, then move on to "Tasks" in order register the tasks you used in your publication. You may add as may studies and datasets in your publication as you wish.</p>
             <p>In order to properly integrate your data into our database, we ask you to follow our instructions precisely. Importantly, this includes our restrictions placed on the uploaded data. Make sure that your column names match ours exactly and that the identifiers in the raw data match those you enter in the respective overview surveys.</p>
             <p>When you are finished with your data entry, please click on the "Submit Data" button. To save and restore your unsaved work, use the "Save Progress" button.</p>
