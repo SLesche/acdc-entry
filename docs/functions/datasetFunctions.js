@@ -71,7 +71,7 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
     document.getElementById("content").innerHTML = `
     <div class="display-text">
         <h1>${study_name}: Dataset ${dataset_idx + 1}</h1> 
-            <p>Here, please provide information on the dataset. <b>This should be limited to one between group!</b> Add data from other between conditions by using a new dataset.</p>
+            <p>Here, please provide information on the dataset. <b>This should be limited to one between group in one task!</b> Add data from other between conditions or other tasks by using a new dataset.</p>
             <form id="dataInfoSurvey" class="survey-form">
                 <label for="task_name" class="survey-label">Select the task used:</label>
                 <select id="task_name" name="task_name">

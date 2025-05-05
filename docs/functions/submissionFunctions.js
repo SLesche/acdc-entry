@@ -188,9 +188,10 @@ function validate_submission(control) {
             }
         }
 
-        if (study.study_data.n_groups != (Object.keys(study.dataset_info).length)) {
-            alert_messages.push(`The number of groups (${study.study_data.n_groups}) does not match the number of datasets (${(Object.keys(study.dataset_info).length)}) in Study ${parseInt(study_idx) + 1}.`);
-        }
+        // if (study.study_data.n_groups != (Object.keys(study.dataset_info).length)) {
+        //     alert_messages.push(`The number of groups (${study.study_data.n_groups}) does not match the number of datasets (${(Object.keys(study.dataset_info).length)}) in Study ${parseInt(study_idx) + 1}.`);
+        // }
+        // Cannot do this because different tasks require multiple datasets
     }
 
     // Validate statement set data
