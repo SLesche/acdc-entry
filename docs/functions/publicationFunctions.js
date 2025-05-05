@@ -90,6 +90,13 @@ function initializePublicationSurvey(control, publication_idx) {
         <p>Feel free to add as many studies as needed.</p>        
         
         <form id="publicationSurvey" class = "survey-form">
+            <label for="allow_share" class="survey-label">Are you allowed to publicly share this data?</label>
+            <div class="radio-buttons" id = "allow_share">
+                <input type="radio" id="allow_share_yes" name="allow_share" value="1" ${publication.allow_share === '1' ? 'checked' : ''}>
+                <label for="allow_share_yes">Yes</label>
+                <input type="radio" id="allow_share_no" name="allow_share" value="0" ${publication.allow_share === '0' ? 'checked' : ''}>
+                <label for="allow_share_no">No</label><br>
+            </div>
             <label for="authors" class = "survey-label">Who are the authors of the publication?</label>
             <input type="text" id="authors" name="authors" value="${publication.authors || ''}"><br>
             <p class="survey-label-additional-info">Please list only the surnames of the authors separated by comma, i.e. "Smith, Müller, Garcia".</p>
@@ -141,6 +148,7 @@ function collectPublicationData(){
     const country = document.getElementById('country').value;
     const keywords = document.getElementById('keywords').value;
     const contact = document.getElementById('contact').value;
+    const allow_share = getRadioButtonSelection('allow_share');
 
     // Store the values in the control object
     const publication_data = {
@@ -152,6 +160,7 @@ function collectPublicationData(){
         country: country,
         keywords: keywords,
         contact: contact,
+        allow_share: allow_share,
     }
 
     return publication_data;
@@ -163,13 +172,19 @@ function validatePublicationData(publication_data){
     var alert_message = 'This field does not match validation criteria.';
     // Check if any of the fields are empty
 
-    const required_keys = ['authors', 'first_author', 'title', 'apa_reference', 'conducted', 'country', 'contact'];
+    const required_keys = ['allow_share', 'authors', 'first_author', 'title', 'apa_reference', 'conducted', 'country', 'contact'];
     for (const key of required_keys) {
         if (!publication_data[key]) {
             alert_message = 'This field is required.';
             displayValidationError(key, alert_message);
             return false;
         }
+    }
+
+    if (publication_data.allow_share == 0) {
+        alert_message = 'You can only upload data that you are allowed to share.';
+        displayValidationError("allow_share", alert_message);
+        return false;
     }
 
     if (publication_data.authors.includes(".")) {
