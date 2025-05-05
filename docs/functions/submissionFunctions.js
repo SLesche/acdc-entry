@@ -224,7 +224,7 @@ function initializeNavbarFromProgress(progress) {
                 const addStudyButton = document.getElementById("addStudyButton-" + publication_idx);
                 if (addStudyButton) {
                     addStudyButton.click();
-                    console.log("Clicked addStudyButton for publication " + publication_idx);
+                    // console.log("Clicked addStudyButton for publication " + publication_idx);
                 }
             }
 
@@ -235,7 +235,7 @@ function initializeNavbarFromProgress(progress) {
                     const addDatasetButton = document.getElementById("addDatasetButton-" + publication_idx + "-" + study_idx);
                     if (addDatasetButton) {
                         addDatasetButton.click();
-                        console.log("Clicked addDatasetButton for study " + study_idx + " in publication " + publication_idx);
+                        // console.log("Clicked addDatasetButton for study " + study_idx + " in publication " + publication_idx);
                     }
                 }
             }
@@ -249,7 +249,7 @@ function initializeNavbarFromProgress(progress) {
             const addTaskButton = document.getElementById("addTaskButton");
             if (addTaskButton) {
                 addTaskButton.click();
-                console.log("Clicked addTaskButton for task " + task_idx);
+                // console.log("Clicked addTaskButton for task " + task_idx);
             }
         }
     }
