@@ -1,7 +1,7 @@
 function addData(parentElement, control, publication_idx, study_idx) {
     // Create a new list item for the dataset
     const dataset_idx = getNewId(control.publication_info[publication_idx].study_info[study_idx].dataset_info);
-    const dataset_name = "Data " + (dataset_idx + 1);
+    const dataset_name = "Dataset  " + (dataset_idx + 1);
     control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx] = setupDatasetInfo(dataset_idx);
 
     const listItem = document.createElement("li");
@@ -70,8 +70,8 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">
-        <h1>${study_name}: Raw Data ${dataset_idx + 1}</h1> 
-            <p>Here, please provide information about your raw data by uploading it through the interface below. Your data should adhere to the following guidelines:</p>
+        <h1>${study_name}: Dataset ${dataset_idx + 1}</h1> 
+            <p>Here, please provide information on the dataset. <b>This should be limited to one between group!</b> Add data from other between conditions by using a new dataset.</p>
             <form id="dataInfoSurvey" class="survey-form">
                 <label for="task_name" class="survey-label">Select the task used:</label>
                 <select id="task_name" name="task_name">
