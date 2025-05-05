@@ -51,7 +51,7 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 <li><strong>block:</strong> A unique identifier for each block for a given subject.</li>
                 <li><strong>trial:</strong> A unique identifier for each trial for a given subject.</li>
                 <li><strong>within_identifier:</strong> A unique identifier for a within subject conditions. This must be one of the identifiers encoded in "Within Conditions".</li>
-                <li><strong>congruency:</strong> The value indicating the congruency condition. Must be "congruent", "incongruent", or "neutral".</li>
+                <li><strong>congruency:</strong> The value indicating the congruency condition. Must be "1" (congruent), "2" (incongruent), or "3" (neutral).</li>
                 <li><strong>accuracy:</strong> The value indicating the accuracy of the response "1" for correct and "0" for incorrect.</li>
                 <li><strong>rt:</strong> The value indicating the response time <b>in seconds</b>.</li>
             </ul>
@@ -268,9 +268,9 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx, data
 
     // Check that congruency is only congruent, incongruent, neutral, or NA
     const congruency_vals = raw_data.data.map(row => row.congruency);
-    const invalid_congruency_vals = congruency_vals.filter(val => val != 'congruent' && val != 'incongruent' && val!= 'neutral' && val !== 'NA');
+    const invalid_congruency_vals = congruency_vals.filter(val => val != '1' && val != '2' && val!= '3' && val !== 'NA');
     if (invalid_congruency_vals.length > 0) {
-        alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "congruent", "incongruent", "neutral", or "NA".`;
+        alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "1" (congruent), "2" (incongruent), or "3" (neutral), or "NA".`;
         displayValidationError('raw_data_file', alert_message);
         return false;
     }
