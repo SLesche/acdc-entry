@@ -38,9 +38,10 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
         <h1>${study_name}: Raw Data ${dataset_idx + 1}</h1> 
             <p>Here, please provide information about your raw data by uploading it through the interface below. Your data should adhere to the following guidelines:</p>
             <ul class = "list-of-entries">
-                <li>Ensure that your dataset includes all columns as specified in the guidelines. If certain measurements (e.g., reaction times) were not collected, you may leave those columns out.</li>
+                <li>Ensure that your dataset includes all columns as specified in the guidelines. If certain measurements were not collected, you may leave those columns out.</li>
                 <li>It is crucial that the columns you do include have the exact names we specified. This consistency is essential for accurate integration and analysis.</li>
-                <li>Make sure that your experimental conditions and statements used are using exactly the same identifiers as indicated in the "Experimental Conditions" and "Statementset" surveys. This ensures that your data can be correctly interpreted in the context of the study.</li>
+                <li>Make sure that your within conditions are using exactly the same identifiers as indicated in the "Within Conditions" survey. This ensures that your data can be correctly interpreted in the context of the study.</li>
+                <li>Make sure that you only upload data from <b>one between-subject condition</b> at a time. If you have multiple between-subject conditions, please upload them separately in multiple dataset questionnaires.</li>
                 <li>For any missing values, please encode them as <i>NA</i>. For example, accuracy can only take the values "0", "1" or "<i>NA</i>". If you chose any other encodings to mark missing or incomplete values, please recode these to <i>NA</i>.</li>
             </ul>
             
@@ -269,7 +270,7 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx, data
     const congruency_vals = raw_data.data.map(row => row.congruency);
     const invalid_congruency_vals = congruency_vals.filter(val => val != 'congruent' && val != 'incongruent' && val!= 'neutral' && val !== 'NA');
     if (invalid_congruency_vals.length > 0) {
-        alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "0", "1", or "NA".`;
+        alert_message = `The "congruency" column contains invalid values: ${invalid_congruency_vals.slice(0, 5).join(', ')}. It should only contain "congruent", "incongruent", "neutral", or "NA".`;
         displayValidationError('raw_data_file', alert_message);
         return false;
     }
