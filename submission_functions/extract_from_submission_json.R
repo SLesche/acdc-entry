@@ -1,21 +1,32 @@
 extract_from_submission_json <- function(json_path){
   json_obj = jsonlite::read_json(json_path)
   
+  json_obj = replace_999_with_na(json_obj)
+  
   submission_list = list()
   
   submission_list$publication_data = as.data.frame(json_obj$publication_data)
   
   n_statementsets = length(json_obj$statementset_info)
-  submission_list$statementset_info = vector(mode = "list", n_statementsets)
   
   if (n_statementsets > 0) {
-    for (istatementset in 1:n_statementsets){
-      submission_list$statementset_info[[istatementset]]$publication = json_obj$statementset_info[[istatementset]]$statementset_publication
-      submission_list$statementset_info[[istatementset]]$statementset_data = as.data.frame(data.table::rbindlist(json_obj$statementset_info[[istatementset]]$statementset_data))
-      
-      columns_to_extract = c("statement_identifier", "statement_text", "statement_accuracy", "statement_category", "proportion_true")
-      submission_list$statementset_info[[istatementset]]$statementset_data = dplyr::select(submission_list$statementset_info[[istatementset]]$statementset_data, dplyr::any_of(columns_to_extract))
+    if (length(json_obj$statementset_info[[1]]) > 0){
+      submission_list$statementset_info = vector(mode = "list", n_statementsets)
+      for (istatementset in 1:n_statementsets){
+        submission_list$statementset_info[[istatementset]]$publication = json_obj$statementset_info[[istatementset]]$statementset_publication
+        
+        if (trimws(submission_list$statementset_info[[istatementset]]$publication) == ""){
+          submission_list$statementset_info[[istatementset]]$publication = submission_list$publication_data$apa_reference
+        }
+        
+        submission_list$statementset_info[[istatementset]]$statementset_data = as.data.frame(data.table::rbindlist(json_obj$statementset_info[[istatementset]]$statementset_data))
+        
+        columns_to_extract = c("statement_identifier", "statement_text", "statement_accuracy", "statement_category", "proportion_true")
+        submission_list$statementset_info[[istatementset]]$statementset_data = dplyr::select(submission_list$statementset_info[[istatementset]]$statementset_data, dplyr::any_of(columns_to_extract))
+      }
     }
+  } else {
+    n_statementsets = 0
   }
   
   n_studies = length(json_obj$study_info)
@@ -24,7 +35,7 @@ extract_from_submission_json <- function(json_path){
   for (istudy in 1:n_studies){
     submission_list$study_info[[istudy]]$study_data = as.data.frame(json_obj$study_info[[istudy]]$study_data)
     submission_list$study_info[[istudy]]$repetition_data = as.data.frame(data.table::rbindlist(json_obj$study_info[[istudy]]$repetition_data))
-    
+
     columns_to_extract = c("subject", "presentation_identifier", "trial", "response", "repeated")
     
     # Here check if has conditions

@@ -1,5 +1,5 @@
-add_submission_to_db <- function(conn, submission_obj, db_path){
-  db_overview = generate_db_overview_table(db_path)
+add_submission_to_db <- function(conn, submission_obj){
+  db_overview = generate_db_overview_table(conn)
   
   pub_code = submission_obj$publication_data$publication_code
   if (does_publication_code_exist(conn, pub_code) == TRUE){
@@ -32,7 +32,7 @@ add_submission_to_db <- function(conn, submission_obj, db_path){
           statementset_publication, 
           "'"
         )
-        statementset_id = DBI::dbGetQuery(conn, sql_query)
+        statementset_id = DBI::dbGetQuery(conn, sql_query)[1, 1]
       } else {
         statementset_id = find_next_free_id(conn, "statementset_table")
       }
@@ -43,7 +43,10 @@ add_submission_to_db <- function(conn, submission_obj, db_path){
       
       statementset_keys[istatementset, "statementset_id"] = statementset_id
       
-      add_data_to_table(conn, statementset_info, "statementset_table", db_overview)
+      # only submit if entry does not already exist
+      if (does_statement_publication_exist(conn, statementset_publication) == FALSE){
+        add_data_to_table(conn, statementset_info, "statementset_table", db_overview)
+      }
       
       # For statements
       statement_id = find_next_free_id(conn, "statement_table")
@@ -66,10 +69,10 @@ add_submission_to_db <- function(conn, submission_obj, db_path){
     study_info$publication_id = pub_id
     study_info$study_id = study_id
     
-    if (n_statementsets > 0){
-      study_info$statementset_id = statementset_keys[statementset_keys$statementset_index == study_info$statementset_idx, "statementset_id"]
-    } else {
+    if (n_statementsets == 0 | study_info$statementset_idx == 0){
       study_info$statementset_id = NA
+    } else {
+      study_info$statementset_id = statementset_keys[statementset_keys$statementset_index == study_info$statementset_idx, "statementset_id"]
     }
     
     add_data_to_table(conn, study_info, "study_table", db_overview)
@@ -108,7 +111,7 @@ add_submission_to_db <- function(conn, submission_obj, db_path){
     if ("within_data" %in% names(submission_obj$study_info[[istudy]])){
       has_within_conditions = 1
       # Within
-      within_info = submission_obj$study_info[[istudy]]$within_tabe
+      within_info = submission_obj$study_info[[istudy]]$within_data
       within_info$within_id = within_id:(within_id + nrow(within_info) -1)
       within_info$study_id = study_id
       
@@ -128,25 +131,36 @@ add_submission_to_db <- function(conn, submission_obj, db_path){
       
     }
     
+    # procedure
+    procedure_id = find_next_free_id(conn, "procedure_table")
+    procedure_info = submission_obj$study_info[[istudy]]$procedure_data
     
-    # presentation
-    presentation_id = find_next_free_id(conn, "presentation_table")
-    presentation_info = submission_obj$study_info[[istudy]]$presentation_data
+    procedure_info$procedure_id = procedure_id:(procedure_id + nrow(procedure_info) - 1)
     
-    presentation_info$presentation_id = presentation_id:(presentation_id + nrow(presentation_info) - 1)
+    procedure_info$study_id = study_id
     
-    presentation_info$study_id = study_id
+    procedure_keys = procedure_info[, c("procedure_id", "procedure_identifier")]
     
-    presentation_keys = presentation_info[, c("presentation_id", "presentation_identifier")]
-    
-    add_data_to_table(conn, presentation_info, "presentation_table", db_overview)
+    add_data_to_table(conn, procedure_info, "procedure_table", db_overview)
     
     
     # Observation
+    # Find next free subject number
+    sql_query = paste0(
+      "SELECT max(subject) FROM observation_table"
+    )
+    
+    max_subject = DBI::dbGetQuery(conn, sql_query)[1, 1]
+    if (is.na(max_subject)){
+      max_subject = 0
+    }
+    
     observation_table = submission_obj$study_info[[istudy]]$raw_data
     
-    observation_table = replace_id_keys_in_data(observation_table, presentation_keys, "presentation", "_identifier")
-    if (n_statementsets > 0){
+    observation_table$subject = dplyr::dense_rank(observation_table$subject) + max_subject
+    
+    observation_table = replace_id_keys_in_data(observation_table, procedure_keys, "procedure", "_identifier")
+    if (n_statementsets > 0 & study_info$statementset_idx != 0){
       observation_table = replace_id_keys_in_data(observation_table, statement_keys_list[[study_info$statementset_idx]], "statement", "_identifier")
     } else {
       observation_table$statement_id = NA

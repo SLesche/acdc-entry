@@ -1,8 +1,5 @@
 # Function to generate CSV overview of an SQLite database
-generate_db_overview_table <- function(db_path) {
-  # Connect to the SQLite database
-  con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
-  
+generate_db_overview_table <- function(con) {
   # Get a list of all tables in the database
   tables <- DBI::dbListTables(con)
   tables <- tables[which(!grepl("sqlite", tables))]
@@ -57,9 +54,6 @@ generate_db_overview_table <- function(db_path) {
   
   # Combine all tables' data into a single dataframe
   combined_data <- do.call(rbind, all_data)
-  
-  # Close the connection
-  DBI::dbDisconnect(con)
   
   return(combined_data)
 }

@@ -15,5 +15,7 @@ prep_statementset_data <- function(statementset_data, db_overview){
     dplyr::across(dplyr::any_of(numeric_columns), ~as.numeric(sub(",", ".", ., fixed = TRUE)))
     )
   
+  clean_statementset_data <- clean_char_columns(clean_statementset_data, db_overview, "statement_table")
+  
   return (clean_statementset_data)
 }

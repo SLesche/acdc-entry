@@ -96,8 +96,8 @@ create_truth_db <- function(file_path){
   
   DBI::dbExecute(
     conn,
-    "CREATE TABLE presentation_table (
-    presentation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    "CREATE TABLE procedure_table (
+    procedure_id INTEGER PRIMARY KEY AUTOINCREMENT,
     study_id INTEGER,
     repetition_time FLOAT,
     repetition_location VARCHAR(255),
@@ -125,7 +125,7 @@ create_truth_db <- function(file_path){
     observation_id INTEGER PRIMARY KEY AUTOINCREMENT,
     between_id INTEGER,
     within_id INTEGER,
-    presentation_id INTEGER,
+    procedure_id INTEGER,
     subject INTEGER,
     trial INTEGER,
     statement_id INTEGER,
@@ -135,9 +135,9 @@ create_truth_db <- function(file_path){
     certainty FLOAT,
     FOREIGN KEY (between_id) REFERENCES between_table(between_id),
     FOREIGN KEY (within_id) REFERENCES within_table(within_id),
-    FOREIGN KEY (presentation_id) REFERENCES presentation_table(presentation_id),
+    FOREIGN KEY (procedure_id) REFERENCES procedure_table(procedure_id),
     FOREIGN KEY (statement_id) REFERENCES statement_table(statement_id),
-    UNIQUE (subject, trial, within_id, between_id, presentation_id, statement_id)
+    UNIQUE (subject, trial, within_id, between_id, procedure_id, statement_id)
     );"
   )
 }
