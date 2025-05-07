@@ -79,7 +79,7 @@ function submitData(control) {
 
     saveProgress(control);
 
-    alert("Data submitted successfully!");
+    alert("Data submitted successfully! Send the downloaded files to our team via email (julia.haaf@uni-potsdam.de). Thank you for your contribution!");
 }
 
 function saveProgress(control){
