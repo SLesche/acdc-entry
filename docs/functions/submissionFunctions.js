@@ -52,12 +52,17 @@ function submitData(control) {
         return;
     }
 
+    const version_number = "1.0.0"; // Replace with the actual version number
+
     console.log(control);
 
     // clean the control data
     const cleaned_control = cleanDataForSubmission(control);
 
     console.log(cleaned_control);
+
+    control.version_number = version_number;
+    cleaned_control.version_number = version_number;
 
     // Write the data into a json file
     const submission_data = JSON.stringify(cleaned_control);
