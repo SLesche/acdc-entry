@@ -116,6 +116,9 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
                 <label for "github" class="survey-label">If available, provide the link to the data on an open access resource sharing platform.</label>
                 <input type="text" id="github" name="github" value="${dataset_data.github || ''}"><br>
 
+                <label for "data_excl" class="survey-label">Describe whether and how you excluded any data here</label>
+                <input type="text" id="data_excl" name="data_excl" value="${dataset_data.data_excl || ''}"><br>
+
 
                 <button type="submit" class="survey-button">Submit</button>
             </form>
@@ -146,6 +149,7 @@ function collectDatasetSurvey() {
     const fixation_cross = document.getElementById('fixation_cross').value;
     const time_limit = document.getElementById('time_limit').value;
     const github = document.getElementById('github').value;
+    const data_excl = document.getElementById('data_excl').value;
 
     const dataset_data = {
         task_name: task_name,
@@ -158,7 +162,8 @@ function collectDatasetSurvey() {
         neutral_trials: neutral_trials,
         fixation_cross: fixation_cross,
         time_limit: time_limit,
-        github: github
+        github: github,
+        data_excl: data_excl,
     };
 
     return dataset_data;

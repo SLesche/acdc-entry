@@ -101,9 +101,6 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
             <label for="study_comment" class = "survey-label">Please provide a short description of the study (1-2 sentences): What was investigated? How was it studied?</label>
             <input type="text" id="study_comment" name="study_comment" value="${study_data.study_comment || ''}"><br>
 
-            <label for="open_data_link" class="survey-label">If available, provide the link to the data on an open access resource sharing platform.</label>
-            <input type="text" id="open_data_link" name="open_data_link" value="${study_data.open_data_link || ''}"><br>
-
             <button type="submit" class="survey-button">Submit</button>
         </form>
     </div>
@@ -122,13 +119,11 @@ function collectStudyData() {
     const n_groups = document.getElementById('n_groups').value;
     const n_tasks = document.getElementById('n_tasks').value;
     const study_comment = document.getElementById('study_comment').value;
-    const open_data_link = document.getElementById('open_data_link').value;
 
     const study_data = {
         n_groups: n_groups,
         n_tasks: n_tasks,
         study_comment: study_comment,
-        open_data_link: open_data_link,
     }
     
     return study_data;
