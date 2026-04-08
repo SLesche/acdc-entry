@@ -1,28 +1,25 @@
 body {
     /* display: flex; */
     margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    color: var(--text-color);
-    background-color: var(--homepage-background-color);
+    font-size: 18px;
 }
-
+/* 
 .index-body {
     background-color: var(--homepage-background-color);
 }
 
 .data-submission-body {
     background-color: var(--default-background-color);
-}
+} */
 
 .sidebar {
     width: 300px;
-    background-color: var(--sidebar-background-color);
+    background-color:  var(--bs-primary);
     padding: 20px;
     position: fixed;
     box-sizing: border-box;
     height: 100vh;
-    color: var(--light-text-color);
+    color: var(--bs-secondary);
     overflow-y: auto;
     transition: width 0.3s ease;
 }
@@ -35,7 +32,7 @@ body {
 .content {
     flex: 1;
     padding: 30px 50px;
-    background-color: var(--default-background-color);
+    background-color:  var(--bs-secondary);
     box-sizing: border-box;
     overflow-y: auto;
     margin-left: 300px;
@@ -80,6 +77,15 @@ ul {
 .active::before {
     content: '\25BC'; /* Down-pointing triangle */
 }
+
+.collapsible::before,
+.active::before {
+  font-family: Arial, sans-serif !important;
+  color: inherit !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
 .actions {
     display: none;
     position: absolute;
@@ -92,7 +98,7 @@ ul {
 
 .display-text {
     width: min(90%, 900px);
-    background-color: var(--text-background-color);
+    background-color:  var(--bs-secondary);
 }
 
 /* Container for the scrollable table */
@@ -107,34 +113,6 @@ ul {
 
 }
 
-/* Basic table styling */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    white-space: nowrap; /* Prevent text from wrapping */
-}
-
-th, td {
-    padding: 8px 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    /* max-width: 200px; Adjust the max-width as needed */
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; Prevent text from wrapping */
-}
-
-th {
-    background-color: var(--table-header-background-color);
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
-/* Optional: Style the table rows */
-tr:nth-child(even) {
-    background-color: var(--table-even-background-color);
-}
 
 nav {
     max-width: 1200px;
@@ -143,7 +121,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--nav-background-color);
+    background-color: var(--bs-primary);
 }
 
 .logo-container {
@@ -177,17 +155,6 @@ nav {
     background-color: var(--dark-hover-color);
 }
 
-.submit-btn {
-    background-color: var(--special-button-color);
-    color: var(--light-text-color);
-    font-weight: bold;
-    border-radius: 5px;
-}
-
-.submit-btn:hover {
-    background-color:var(--special-button-hover);
-}
-
 /* Section Styles */
 main {
     max-width: 1200px;
@@ -198,7 +165,7 @@ main {
 .section {
     padding: 50px 20px;
     margin-bottom: 20px;
-    background-color: var(--default-background-color);
+    background-color:  var(--bs-secondary);
     border: 1px solid #ddd;
     border-radius: 10px;
     text-align: left;
@@ -253,37 +220,4 @@ html {
 
 .card:hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
-
-.title {
-    font-size: 1.5em;
-    color: #333;
-    margin: 0 0 10px;
-}
-
-.author, .journal {
-    font-size: 0.9em;
-    color: #777;
-    margin: 5px 0;
-}
-
-.abstract {
-    font-size: 1em;
-    color: #555;
-    margin: 15px 0;
-}
-
-.read-more {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 0.9em;
-    transition: background-color 0.3s ease;
-}
-
-.read-more:hover {
-    background-color: #0056b3;
 }
