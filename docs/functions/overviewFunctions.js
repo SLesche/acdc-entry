@@ -98,7 +98,7 @@ function generateOverviewPage(control) {
                     // initializePublicationSurvey(control); // Initialize the publication survey with the updated control object
                     // console.log(control);
                 } else {
-                    alert("Invalid progress file. Please upload a valid progress file.");
+                    showAlert("Invalid progress file. Please upload a valid progress file.", 'danger');
                 }
             };
             reader.readAsText(file);

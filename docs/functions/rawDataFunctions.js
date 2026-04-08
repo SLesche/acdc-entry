@@ -35,7 +35,9 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">
-        <h1>${study_name}: Raw Data ${dataset_idx + 1}</h1> 
+        <h1 class="mb-3">${study_name}: Raw Data ${dataset_idx + 1}</h1> 
+        <div class="alert alert-info" role="alert">
+        <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
             <p>Here, please provide information about your raw data by uploading it through the interface below. Your data should adhere to the following guidelines:</p>
             <ul class = "list-of-entries">
                 <li>Ensure that your dataset includes all columns as specified in the guidelines. If certain measurements were not collected, you may leave those columns out.</li>
@@ -55,8 +57,9 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 <li><strong>accuracy:</strong> The value indicating the accuracy of the response "1" for correct and "0" for incorrect.</li>
                 <li><strong>rt:</strong> The value indicating the response time <b>in seconds</b>.</li>
             </ul>
-            <div class = "table-container" id = "tableContainerExample">
-                <table>
+            <div class = "table-responsive" id = "tableContainerExample">
+                <table class="table table-bordered table-striped table-sm table-hover align-middle small">
+                    <thead class="text-capitalize-none">
                     <tr>
                         <th>subject</th>
                         <th>block</th>
@@ -66,6 +69,7 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                         <th>accuracy</th>
                         <th>rt</th>
                     </tr>
+                    </thead>
                     <tr>
                         <td>1</td>
                         <td>1</td>
@@ -105,16 +109,36 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 </table>
             </div>         
             <p>Once you’ve prepared your data according to these specifications, you can upload it using the form provided below. Thank you for your cooperation!</p>
-            <form id="rawDataSurvey" class="survey-form">
-                <label for="raw_data_file" class="survey-label">Please upload a .csv file with the raw data in the correct format.</label>
-                <input type="file" id="raw_data_file" name="raw_data_file" accept=".csv" required><br>
-                <span id="file-name-display">${raw_data.raw_data_file ? `File: ${raw_data.raw_data_file.name}` : ''}</span><br>
-                <p id = "textUploadPreview" style = "display: none;">Uploaded file preview:</p>
-                <div id="tableContainerUploaded" class = "table-container" style = "display: none;">
-                </div>
-                <button type="submit" class="survey-button">Submit</button>
-            </form>
+        </div>
 
+        <form id="rawDataSurvey" class="survey-form p-3 border rounded shadow-sm bg-light">
+        <div class="mb-3">
+            <label for="raw_data_file" class="form-label">
+            Please upload a .csv file with the raw data in the correct format.
+            </label>
+            <input 
+            type="file" 
+            id="raw_data_file" 
+            name="raw_data_file" 
+            accept=".csv" 
+            class="form-control" 
+            required
+            >
+        </div>
+
+        <div class="mb-2 text-muted" id="file-name-display">
+            ${raw_data.raw_data_file ? `File: ${raw_data.raw_data_file.name}` : ''}
+        </div>
+
+        <p id="textUploadPreview" class="fw-semibold" style="display: none;">Uploaded file preview:</p>
+
+        <div id="tableContainerUploaded" class="table-responsive" style="display: none;">
+            <!-- Table will be injected here -->
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">
+            Submit
+        </button>
         </form>
     </div>
     `;
@@ -282,7 +306,7 @@ function checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx)
     const study_info = control.publication_info[publication_idx].study_info[study_idx];
     const dataset_info = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx];
     const task_name = dataset_info.dataset_data.task_name;
-    const task_index = getStatementSetIndex(task_name);
+    const task_index = getTaskIndex(task_name);
 
     // if index is null, return false
     if (task_index === null && task_name !== "no information") {
@@ -296,19 +320,19 @@ function checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx)
     if (!task_validated || !dataset_info.within_data.validated || !study_info.study_data.validated || !dataset_info.dataset_data) {
         // Display which sections are missing
         if (!study_info.study_data.validated) {
-            alert('Please enter information about the overall study before submitting the raw data.')
+            showAlert('Please enter information about the overall study before submitting the raw data.', 'danger')
             return false;
         }
         if (!dataset_info.within_data.validated) {
-            alert('Please enter information about the within conditions before submitting the raw data.');
+            showAlert('Please enter information about the within conditions before submitting the raw data.', 'danger');
             return false;
         }
         if (!dataset_info.dataset_data.validated) {
-            alert('Please enter information about the dataset before submitting the raw data.')
+            showAlert('Please enter information about the dataset before submitting the raw data.', 'danger')
             return false;
         }
         if (!task_validated) {
-            alert('Please enter information about the task before submitting the raw data.');
+            showAlert('Please enter information about the task before submitting the raw data.', 'danger');
             return false;
         }
     }
@@ -318,13 +342,12 @@ function checkOtherSubmissions(control, publication_idx, study_idx, dataset_idx)
 async function updateRawDataSurvey(control, publication_idx, study_idx, dataset_idx) {
     raw_data = await collectRawData();
 
+    raw_data.validated = true;
     // Store the values in the control object
-    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.data = raw_data.data;
-    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.raw_data_file = raw_data.raw_data_file;
-    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.validated = true;
+    control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data = raw_data;
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id =  "rawdata-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
