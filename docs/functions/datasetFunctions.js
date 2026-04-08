@@ -70,57 +70,73 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">
-        <h1>${study_name}: Dataset ${dataset_idx + 1}</h1> 
-            <p>Here, please provide information on the dataset. <b>This should be limited to one between group in one task!</b> Add data from other between conditions or other tasks by using a new dataset.</p>
-            <form id="dataInfoSurvey" class="survey-form">
-                <label for="task_name" class="survey-label">Select the task used:</label>
-                <select id="task_name" name="task_name">
+        <h1 class = "mb-3">${study_name}: Dataset ${dataset_idx + 1}</h1> 
+            <div class="alert alert-info" role="alert">
+                <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
+                <p>Here, please provide information on the dataset. <b>This should be limited to one between group in one task!</b> Add data from other between conditions or other tasks by using a new dataset.</p>
+            </div>
+         
+            <h3 class="mb-3">Dataset Details</h2>
+            <form id="dataInfoSurvey"  class="survey-form p-3 border rounded shadow-sm bg-light">
+                <label for="task_name" class="form-label">Select the task used:</label>
+                <select class="form-select" id="task_name" name="task_name">
                     <option value="">Select a task</option>
                     <!-- Options will be populated dynamically -->
-                </select><br>
-                <p class="survey-label-additional-info">Navigate to "Task" in the side-panel and add a task if you do not see your task here.</p>
+                </select>
+                <div class="form-text">Navigate to "Task" in the side-panel and add a task if you do not see your task here.</div>
 
-                <label for="group_description" class="survey-label">Please provide a brief description of the sample (e.g., “University students” or “Participants on MTurk”).</label>
-                <input type="text" id="group_description" name="group_description" value="${dataset_data.group_description || ''}"><br>
-
-                <label for="n_participants" class="survey-label">How many participants are in this dataset?</label>
-                <input type="number" id="n_participants" name="n_participants" value="${dataset_data.n_participants || ''}"><br>
-
-                <label for="mean_age" class="survey-label">What is the mean age of the participants?</label>
-                <input type="number" id="mean_age" name="mean_age" value="${dataset_data.mean_age || ''}"><br>
-
-                <label for="percentage_female" class="survey-label">What percentage of your participants was female?</label>
-                <input type="number" step="0.01" id="percentage_female" name="percentage_female" value="${dataset_data.percentage_female || ''}"><br>
-                <p class="survey-label-additional-info">If 50% of your participants was female, enter "0.50".</p>
-
-                <label for="n_blocks" class="survey-label">How many blocks are in this dataset?</label>
-                <input type="number" id="n_blocks" name="n_blocks" value="${dataset_data.n_blocks || ''}"><br>
-
-                <label for="n_trials" class="survey-label">How many trials are in this dataset?</label>
-                <input type="number" id="n_trials" name="n_trials" value="${dataset_data.n_trials || ''}"><br>
-
-                <label for="neutral_trials" class="survey-label">Did you include neutral trials in this dataset?</label>
-                <div class="radio-buttons" id = "neutral_trials">
-                    <input type="radio" id="neutral_yes" name="neutral_trials" value="1" ${dataset_data.neutral_trials === '1' ? 'checked' : ''}>
-                    <label for="neutral_yes">Yes</label>
-                    <input type="radio" id="neutral_no" name="neutral_trials" value="0" ${dataset_data.neutral_trials === '0' ? 'checked' : ''}>
-                    <label for="neutral_no">No</label><br>
+                <div class="mb-3">
+                <label for="group_description" class="form-label">Please provide a brief description of the sample (e.g., “University students” or “Participants on MTurk”).</label>
+                <input type="text" class="form-control" id="group_description" name="group_description" value="${dataset_data.group_description || ''}">
                 </div>
 
-                <label for "fixation_cross" class="survey-label">Provide information about how/if you presented a fixation cross</label>
-                <input type="text" id="fixation_cross" name="fixation_cross" value="${dataset_data.fixation_cross || ''}"><br>
+                <div class="mb-3">
+                <label for="n_participants" class="form-label">How many participants are in this dataset?</label>
+                <input type="number" class="form-control" id="n_participants" name="n_participants" value="${dataset_data.n_participants || ''}">
+                </div>
 
-                <label for "time_limit" class="survey-label">Provide information about the time limit?</label>
-                <input type="text" id="time_limit" name="time_limit" value="${dataset_data.time_limit || ''}"><br>
+                <div class="mb-3">
+                <label for="mean_age" class="form-label">What is the mean age of the participants?</label>
+                <input type="number" class="form-control" id="mean_age" name="mean_age" value="${dataset_data.mean_age || ''}">
+                </div>
 
-                <label for "github" class="survey-label">If available, provide the link to the data on an open access resource sharing platform.</label>
-                <input type="text" id="github" name="github" value="${dataset_data.github || ''}"><br>
+                <div class="mb-3">
+                <label for="percentage_female" class="form-label">What percentage of your participants was female?</label>
+                <input type="number" class="form-control" step="0.01" id="percentage_female" name="percentage_female" value="${dataset_data.percentage_female || ''}">
+                <div class="form-text">If 50% of your participants was female, enter "0.50".</div>
+                </div>
 
-                <label for "data_excl" class="survey-label">Describe whether and how you excluded any data here</label>
-                <input type="text" id="data_excl" name="data_excl" value="${dataset_data.data_excl || ''}"><br>
+                <div class="mb-3">
+                <label for="n_blocks" class="form-label">How many blocks are in this dataset?</label>
+                <input type="number" class="form-control" id="n_blocks" name="n_blocks" value="${dataset_data.n_blocks || ''}">
 
+                <label for="n_trials" class="form-label">How many trials are in this dataset?</label>
+                <input type="number" class="form-control" id="n_trials" name="n_trials" value="${dataset_data.n_trials || ''}">
+                </div>
 
-                <button type="submit" class="survey-button">Submit</button>
+                ${generateYesNoField('neutral_trials', 'Did you include neutral trials in this dataset?', dataset_data.neutral_trials)}
+
+                <div class="mb-3">
+                <label for "fixation_cross" class="form-label">Provide information about how/if you presented a fixation cross</label>
+                <input type="text" class="form-control" id="fixation_cross" name="fixation_cross" value="${dataset_data.fixation_cross || ''}">
+                </div>
+
+                <div class="mb-3">
+                <label for "time_limit" class="form-label">Provide information about the time limit?</label>
+                <input type="text" class="form-control" id="time_limit" name="time_limit" value="${dataset_data.time_limit || ''}">
+                </div>
+
+                <div class="mb-3">
+                <label for "github" class="form-label">If available, provide the link to the data on an open access resource sharing platform.</label>
+                <input type="text" class="form-control" id="github" name="github" value="${dataset_data.github || ''}">
+                </div>
+
+                <div class="mb-3">
+                <label for "data_excl" class="form-label">Describe whether and how you excluded any data here</label>
+                <input type="text" class="form-control" id="data_excl" name="data_excl" value="${dataset_data.data_excl || ''}">
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
             </form>
     </div>
     `;
@@ -192,7 +208,7 @@ function updateDataInfo(control, publication_idx, study_idx, dataset_idx) {
     control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].dataset_data = dataset_data;
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id =  "datainfo-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
