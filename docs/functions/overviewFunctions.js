@@ -114,6 +114,8 @@ function getNumberOfSubmissions(control) {
     let num_tasks_validated = 0;
     let num_publications_validated = 0;
     let num_studies_validated = 0;
+    let num_raw_data_validated = 0;
+    let num_raw_data = 0;
 
     let total_checkpoints = 0;
     let validated_checkpoints = 0;
@@ -141,8 +143,16 @@ function getNumberOfSubmissions(control) {
             if (control.publication_info[publication_idx].study_info[study_idx].study_data.validated) {
                 num_studies_validated += 1;
                 validated_checkpoints++;
-
             }        
+
+            for (let dataset_idx in control.publication_info[publication_idx].study_info[study_idx].dataset_info) {
+                num_raw_data += 1;
+                total_checkpoints++;
+                if (control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].raw_data.validated) {
+                    num_raw_data_validated += 1;
+                    validated_checkpoints++;
+                }
+            }
         }
 
         // Check if the publication is validated
@@ -153,9 +163,10 @@ function getNumberOfSubmissions(control) {
     }
 
     // Compute percentages
-    const percent_statement_sets_validated = (num_tasks_validated / num_tasks) * 100;
+    const percent_tasks_validated = (num_tasks_validated / num_tasks) * 100;
     const percent_publication_validated = (num_publications_validated / num_total_publications) * 100;
     const percent_studies_validated = (num_studies_validated / num_total_studies) * 100;
+    const percent_datasets_validated = (num_raw_data_validated / num_raw_data) * 100;
     const percent_overall_validated = (validated_checkpoints / total_checkpoints) * 100;
 
     return {
@@ -165,12 +176,15 @@ function getNumberOfSubmissions(control) {
         num_tasks_validated,
         num_publications_validated,
         num_studies_validated,
-        percent_statement_sets_validated,
+        percent_tasks_validated,
         percent_publication_validated,
         percent_studies_validated,
         percent_overall_validated,
         validated_checkpoints,
         total_checkpoints,
+        num_raw_data_validated,
+        num_raw_data,
+        percent_datasets_validated
     };
 }
 function printProgressReport(progress_report) {
@@ -206,11 +220,23 @@ function printProgressReport(progress_report) {
                 <div class="mb-3">
                     <label><strong>Tasks Validated:</strong> ${progress_report.num_tasks_validated} / ${progress_report.num_tasks}</label>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
-                            style="width: ${progress_report.percent_statement_sets_validated.toFixed(1)}%;"
-                            aria-valuenow="${progress_report.percent_statement_sets_validated.toFixed(1)}"
+                        <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
+                            style="width: ${progress_report.percent_tasks_validated.toFixed(1)}%;"
+                            aria-valuenow="${progress_report.percent_tasks_validated.toFixed(1)}"
                             aria-valuemin="0" aria-valuemax="100">
-                            ${progress_report.percent_statement_sets_validated.toFixed(1)}%
+                            ${progress_report.percent_tasks_validated.toFixed(1)}%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label><strong>Datasets Validated:</strong> ${progress_report.num_raw_data_validated} / ${progress_report.num_raw_data}</label>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
+                            style="width: ${progress_report.percent_datasets_validated.toFixed(1)}%;"
+                            aria-valuenow="${progress_report.percent_datasets_validated.toFixed(1)}"
+                            aria-valuemin="0" aria-valuemax="100">
+                            ${progress_report.percent_datasets_validated.toFixed(1)}%
                         </div>
                     </div>
                 </div>
