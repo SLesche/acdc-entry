@@ -86,11 +86,11 @@ function initializePublicationSurvey(control, publication_idx) {
         <h1>${publication_name}</h1>
         <div class="alert alert-info" role="alert">
             <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
-            <p>Before you begin entering your data, please start by providing details about the publication. This refers to the overall paper or article to which your data is associated.</p>
             <p>In this section, you'll be asked to provide key information about the publication, such as the title, authors, and publication date. This helps us organize and connect your data to the correct sources, making it easier for others to reference and understand the context of your research.</p>
             <p>After completing the publication details, you will have the opportunity to add one or more studies associated with this publication. Each study represents a distinct experiment or analysis conducted within the scope of the publication.</p>
             <p>By following this structure, you help ensure that your data is accurately represented and easily accessible for future use.</p>
-            <p>Feel free to add as many studies as needed.</p>        
+            <p>After you have completed this form on the publication details, start by setting up the correct number of studies and sets of statements in your publication. Feel free to add as many studies as needed.</p>        
+            <p>Similarly, you can add information about tasks that were used in the studies by clicking "+ Add Task" on the left side. If you used the same task for all studies, you only need to initialize one task.</p>
         </div>
 
         <h3 class="mb-3">Publication Details</h3>

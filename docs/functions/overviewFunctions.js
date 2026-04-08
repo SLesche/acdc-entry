@@ -32,14 +32,14 @@ function generateOverviewPage(control) {
             <h1 class = "mb-3">Attentional Control Data Collection (ACDC) Data Submission Page</h1>
             <p>Thank you for contributing to our growing database of attentional control research. By entering your data here, you help make research more accessible and reusable for everyone.</p>
             <p>You can download and explore the dataset under this <a href="https://www.uni-potsdam.de/en/psych-methods/research/attentional-control-data-collection" target="_blank">link</a>.</p>
-            <p>On the side, you find a navigation page to enter your data. We recommend you start with "Publication" to provide general information about the publication, then move on to "Tasks" in order register the tasks you used in your publication. You may add as may studies and datasets in your publication as you wish.</p>
+            <p>On the side, you find a navigation page to enter your data. We recommend you start with "Publication" to provide general information about the publication, then move on to "Tasks" in order register the tasks you used in your publication. You may add as many studies and datasets in your publication as you wish.</p>
             
             <div class="alert alert-info" role="alert">
                 <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
 
                 <p>In order to properly integrate your data into our database, we ask you to follow our instructions precisely. Importantly, this includes our restrictions placed on the uploaded data. Make sure that your column names match ours exactly and that the identifiers in the raw data match those you enter in the respective overview surveys.</p>
-                <p>When you are finished with your data entry, please click on the "Submit Data" button. To save and restore your unsaved work, use the "Save Progress" button.</p>
-                <p>After submission, the website will attempt to download 2 files onto your downloads folder. One contains the final submission and the other is a backup of your submission progress. We ask you to send both of them to us via email with the subject "ACDC Submission"</p>
+                <p>When you are finished with your data entry, please click on the "Submit Data" button. To save and restore your unsaved work, use the "Save Progress" and "Upload Progress" buttons.</p>
+                <p>After submission, send the downloaded .json files to us via email with the subject "ACDC Submission". Our team will review your data and add it to the database as soon as possible.</p>
             </div>
 
             ${printProgressReport(getNumberOfSubmissions(control))}

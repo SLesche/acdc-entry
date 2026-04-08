@@ -74,6 +74,7 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
             <div class="alert alert-info" role="alert">
                 <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
                 <p>Here, please provide information on the dataset. <b>This should be limited to one between group in one task!</b> Add data from other between conditions or other tasks by using a new dataset.</p>
+                <p> This information is crucial for understanding the context of your data, including details about the participants, the task conditions, and any specific manipulations that were applied. Please ensure that the information you provide here is accurate and complete, as it will help others interpret your data correctly. Importantly, make sure that the description of participants allows us to identify what the between manipulations are.</p>
             </div>
          
             <h3 class="mb-3">Dataset Details</h2>

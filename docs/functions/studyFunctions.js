@@ -88,10 +88,9 @@ function initializeStudySurvey(control, publication_idx, study_idx) {
         <h1 class = "mb-3">${study_name}</h1>
         <div class="alert alert-info" role="alert">
             <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
-            <p>This section is designed to collect key details about the study you conducted. The information you provide here will help us better understand the scope and methodology of your research. You'll be asked about how you measured truth ratings, what other measures were included in your study, the types of analysis you performed, and the specific statements or stimuli used in your research.</p>
-            <p>If your study is available on an open-source platform, you’ll also have the option to share a link, ensuring that others can access the full study for further exploration.</p>
-            <p>This information is crucial for ensuring that your study is well-documented and can be effectively integrated into our database. Thank you for taking the time to provide these details.</p>
-            <p>You will be asked to enter information from different between-subject conditions in different "dataset" surveys. Make sure that the number of between-subject conditions in the dataset survey matches the number of between-subject conditions you enter here.</p>
+            <p>This section is designed to collect key details about the study you conducted. The information you provide here will help us better understand the scope and methodology of your research. You'll be asked to provide a short description of the study.</p>
+            <p>Importantly, this page also asks you to provide the number of "between-subject groups" in your study. Please enter the number of between-subject conditions for this study here. If you have multiple between-subject conditions which may interact, provide the total number of conditions obtained by full crossing the factors.
+            <p> You will later be asked to enter information from different between-subject conditions in different "dataset" surveys. For example, if you collected data from "young" and "old" participants, set up two different datasets, one for each. Make sure that the number of between-subject conditions provided here matches the number of datasets (multiple tasks with the same conditions will multiply this number accordingly) you submit for this study.</p>
         </div>
 
         <h3 class="mb-3">Study Survey</h2>
