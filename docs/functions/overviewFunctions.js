@@ -169,6 +169,8 @@ function getNumberOfSubmissions(control) {
         percent_publication_validated,
         percent_studies_validated,
         percent_overall_validated,
+        validated_checkpoints,
+        total_checkpoints,
     };
 }
 function printProgressReport(progress_report) {
