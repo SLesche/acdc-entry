@@ -108,7 +108,7 @@ function initializeTaskSurvey(control, task_idx) {
         <h1>${task_name}</h1>
         <div class="alert alert-info" role="alert">
             <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
-            <p>In this section, please provide information about <strong>${task_name}</strong>. You will be asked to provide the type of task and a short description of the task.</p>
+            <p>In this section, please provide information about <strong>${task_name}</strong>. You will be asked to provide the type of task and a short description of the task. Feel free to be rather detailed here, in case your paradigm deviates substantially from the standard descriptions.</p>
         </div>
 
         <h3 class="mb-3">Task Details</h3>
