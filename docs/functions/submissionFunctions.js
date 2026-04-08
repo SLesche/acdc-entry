@@ -77,14 +77,14 @@ function showSubmissionSuccessModal() {
     //console.log(control);
     const version_number = "1.0.1"; // Replace with the actual version number
 
-    // clean the control data
-    // const cleaned_control = cleanDataForSubmission(control);
-
-    control.version_number = version_number;
-    // cleaned_control.version_number = version_number;
     // Save the progress before submission
     saveProgress(control, true);
-
+    control.version_number = version_number;
+    
+    // // UNCOMMENT THE FOLLOWING LINES TO ENABLE DIRECT SUBMISSION DOWNLOAD
+    // // clean the control data
+    // const cleaned_control = cleanDataForSubmission(control);
+    // cleaned_control.version_number = version_number;
     // // Write the data into a json file
     // const submission_data = JSON.stringify(cleaned_control);
 

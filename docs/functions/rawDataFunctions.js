@@ -44,13 +44,13 @@ function initializeRawDataSurvey(control, publication_idx, study_idx, dataset_id
                 <li>It is crucial that the columns you do include have the exact names we specified. This consistency is essential for accurate integration and analysis.</li>
                 <li>Make sure that your within conditions are using exactly the same identifiers as indicated in the "Within Conditions" survey. This ensures that your data can be correctly interpreted in the context of the study.</li>
                 <li>Make sure that you only upload data from <b>one between-subject condition</b> at a time. If you have multiple between-subject conditions, please upload them separately in multiple dataset questionnaires.</li>
-                <li>For any missing values, please encode them as <i>NA</i>. For example, accuracy can only take the values "0", "1" or "<i>NA</i>". If you chose any other encodings to mark missing or incomplete values, please recode these to <i>NA</i>.</li>
+                <li>For any missing values, please encode them as <i>NA</i> (except practice blocks, code those as -999). For example, accuracy can only take the values "0", "1" or "<i>NA</i>". If you chose any other encodings to mark missing or incomplete values, please recode these to <i>NA</i>.</li>
             </ul>
             
             <p>Below, you can find an example of how your data should be formatted. Please follow this format to ensure compatibility and ease of use:</p>
             <ul class = "list-of-entries">
                 <li><strong>subject:</strong> A unique identifier for each subject.</li>
-                <li><strong>block:</strong> A unique identifier for each block for a given subject.</li>
+                <li><strong>block:</strong> A unique identifier for each block for a given subject (should be "-999" for practice blocks").</li>
                 <li><strong>trial:</strong> A unique identifier for each trial for a given subject.</li>
                 <li><strong>within_identifier:</strong> A unique identifier for a within subject conditions. This must be one of the identifiers encoded in "Within Conditions".</li>
                 <li><strong>congruency:</strong> The value indicating the congruency condition. Must be "congruent", "incongruent", or "neutral", or "NA".</li>
