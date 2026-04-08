@@ -49,30 +49,35 @@ function initializeConditionSurvey(control, publication_idx, study_idx, dataset_
 
     document.getElementById("content").innerHTML = `
     <div class="display-text">      
-    <h1>${study_name}: Dataset ${dataset_idx + 1} - Within Conditions</h1>
-    <p>This section is designed to collect detailed information about the experimental conditions of your study. Importantly, this should only pertain to manipulations not already encoded through other parts of the questionnaire. For example, the within condition "repeated vs. new statement" should be encoded in its own column in the raw data and not here. Similarly, manipulations of the measurement sessions should be endoced through different measurement sessions in the questionnaire "Measurement Sessions" and then be encoded in the column "session". Only those manipulations that cannot be adequately captured by those parts of the questionnaire should be added here. For example, a between condition of "old vs. young" participants should be coded here.</p>
-    <p>You will also be asked about any experimental manipulations that were applied within the dataset. This information is important for providing context in case there were any unusual occurrences during the study, helping others understand possible variations in the data.</p>
+    <h1 class = "mb-3">${study_name}: Dataset ${dataset_idx + 1} - Within Conditions</h1>
+    <div class="alert alert-info" role="alert">
+        <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
+        <p>This section is designed to collect detailed information about the experimental conditions of your study. Importantly, this should only pertain to manipulations not already encoded through other parts of the questionnaire. For example, the within condition "repeated vs. new statement" should be encoded in its own column in the raw data and not here. Similarly, manipulations of the measurement sessions should be endoced through different measurement sessions in the questionnaire "Measurement Sessions" and then be encoded in the column "session". Only those manipulations that cannot be adequately captured by those parts of the questionnaire should be added here. For example, a between condition of "old vs. young" participants should be coded here.</p>
+        <p>You will also be asked about any experimental manipulations that were applied within the dataset. This information is important for providing context in case there were any unusual occurrences during the study, helping others understand possible variations in the data.</p>
+    </div>
+
+        <h3 class="mb-3">Within Condition Details</h3>
+
         <form id="conditionSurvey" class="survey-form">
-            <label for="has_within_conditions" class="survey-label">Does this data contain any additional within conditions?</label>
-            <div class="form-item" id = "has_within_conditions">
-                <label><input type="radio" name="has_within_conditions" value="1" ${condition_data.has_within_conditions == 1 ? 'checked' : ''}/>Yes</label>
-                <label><input type="radio" name="has_within_conditions" value="0" ${condition_data.has_within_conditions == 0 ? 'checked' : ''}/>No</label>
-            </div>
-
+            ${generateYesNoField('has_within_conditions', 'Does this data contain any additional within conditions?', condition_data.has_within_conditions)}
             
-            <fieldset id="withinConditionsFieldset" ${condition_data.has_within_conditions == 1 ? '' : 'disabled'}>
-                <label for="within_condition_name" class="survey-label">Add a description of the condition:</label>
-                <input type="text" id="within_condition_name" name="within_condition_name"><br>
+            <fieldset id="withinConditionsFieldset" ${condition_data.has_within_conditions == 1 ? '' : 'disabled'} class="border p-3 rounded mb-4">
+                <div class="mb-3">
+                    <label for="within_condition_name" class="form-label">Add a description of the condition:</label>
+                    <input type="text" class="form-control" id="within_condition_name" name="within_condition_name" />
+                </div>
+                <div class="mb-3">
+                    <label for="within_condition_identifier" class="form-label">How is that condition identified in the raw data?</label>
+                    <input type="text" class="form-control" id="within_condition_identifier" name="within_condition_identifier" />
+                </div>
+                <button type="button" onclick="addWithinCondition()" class="btn btn-warning mb-3">Add Condition</button>
 
-                <label for="within_condition_identifier" class="survey-label">How is that condition identified in the raw data?</label>
-                <input type="text" id="within_condition_identifier" name="within_condition_identifier"><br>
-
-                <button type="button" onclick="addWithinCondition()" class="add-button">Add Condition</button><br><br>
-
-                <label class="survey-label" id = "within_conditions_list" style = "display: none;">List of within conditions:</label>
-                <ul id="withinConditionsList" class = "list-of-entries"></ul>
+                <div class="mb-3" id="within_conditions_list" style="display: none;">
+                    <label class="form-label fw-bold">List of within conditions:</label>
+                    <ul id="withinConditionsList" class="list-group ps-3"></ul>
+                </div>
             </fieldset>
-            <button type="submit" class="survey-button">Submit</button>
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
     `;
@@ -205,7 +210,7 @@ function updateConditionSurvey(control, publication_idx, study_idx, dataset_idx)
     control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].within_data = condition_data
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id =  "conditions-" + publication_idx + "-" + study_idx + "-" + dataset_idx;
