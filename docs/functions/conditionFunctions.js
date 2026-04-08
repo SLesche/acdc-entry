@@ -68,6 +68,7 @@ function initializeConditionSurvey(control, publication_idx, study_idx, dataset_
                 <div class="mb-3">
                     <label for="within_condition_identifier" class="form-label">How is that condition identified in the raw data?</label>
                     <input type="text" class="form-control" id="within_condition_identifier" name="within_condition_identifier" />
+                    <div class="form-text">This identifier must match the one provided in the raw data in the column "within_identifier" exactly.</div>
                 </div>
                 <button type="button" onclick="addWithinCondition()" class="btn btn-warning mb-3">Add Condition</button>
 

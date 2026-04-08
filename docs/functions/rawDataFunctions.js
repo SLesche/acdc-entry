@@ -299,6 +299,25 @@ function validateRawDataFile(raw_data, control, publication_idx, study_idx, data
         return false;
     }
 
+    // Check that neutral trials are only present if they were indicated in the dataset
+    let has_neutral_trials = study_info.dataset_info[dataset_idx].dataset_data.neutral_trials;
+
+    if (has_neutral_trials == 0) {
+        if (congruency_vals.includes('neutral')) {
+            alert_message = 'The "congruency" column contains "neutral" trials, but you indicated in the dataset information that there are no neutral trials. Please check your data and dataset information for consistency.';
+            displayValidationError('raw_data_file', alert_message);
+            return false;
+        }
+    }
+
+    if (has_neutral_trials == 1) {
+        if (!congruency_vals.includes('neutral')) {
+            alert_message = 'The "congruency" column does not contain any "neutral" trials, but you indicated in the dataset information that there are neutral trials. Please check your data and dataset information for consistency.';
+            displayValidationError('raw_data_file', alert_message);
+            return false;
+        }
+    }
+    
     return true;
 }
 

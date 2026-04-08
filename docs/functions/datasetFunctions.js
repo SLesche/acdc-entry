@@ -123,8 +123,9 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
                 </div>
 
                 <div class="mb-3">
-                <label for "time_limit" class="form-label">Provide information about the time limit?</label>
+                <label for "time_limit" class="form-label">Provide information about the time limit</label>
                 <input type="text" class="form-control" id="time_limit" name="time_limit" value="${dataset_data.time_limit || ''}">
+                <div class="form-text">For example, "2000ms response deadline"</div>
                 </div>
 
                 <div class="mb-3">
