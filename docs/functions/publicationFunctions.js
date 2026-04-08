@@ -84,48 +84,67 @@ function initializePublicationSurvey(control, publication_idx) {
     document.getElementById("content").innerHTML = `
     <div class = "display-text">
         <h1>${publication_name}</h1>
-        <p>Before you begin entering your data, please start by providing details about the publication. This refers to the overall paper or article to which your data is associated.</p>
-        <p>In this section, you'll be asked to provide key information about the publication, such as the title, authors, and publication date. This helps us organize and connect your data to the correct sources, making it easier for others to reference and understand the context of your research.</p>
-        <p>After completing the publication details, you will have the opportunity to add one or more studies associated with this publication. Each study represents a distinct experiment or analysis conducted within the scope of the publication.</p>
-        <p>By following this structure, you help ensure that your data is accurately represented and easily accessible for future use.</p>
-        <p>Feel free to add as many studies as needed.</p>        
-        
-        <form id="publicationSurvey" class = "survey-form">
-            <label for="allow_share" class="survey-label">Are you allowed to publicly share this data?</label>
-            <div class="radio-buttons" id = "allow_share">
-                <input type="radio" id="allow_share_yes" name="allow_share" value="1" ${publication.allow_share === '1' ? 'checked' : ''}>
-                <label for="allow_share_yes">Yes</label>
-                <input type="radio" id="allow_share_no" name="allow_share" value="0" ${publication.allow_share === '0' ? 'checked' : ''}>
-                <label for="allow_share_no">No</label><br>
-            </div>
-            <label for="authors" class = "survey-label">Who are the authors of the publication?</label>
-            <input type="text" id="authors" name="authors" value="${publication.authors || ''}"><br>
-            <p class="survey-label-additional-info">Please list only the surnames of the authors separated by comma, i.e. "Smith, Müller, Garcia".</p>
+        <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
+            <p>Before you begin entering your data, please start by providing details about the publication. This refers to the overall paper or article to which your data is associated.</p>
+            <p>In this section, you'll be asked to provide key information about the publication, such as the title, authors, and publication date. This helps us organize and connect your data to the correct sources, making it easier for others to reference and understand the context of your research.</p>
+            <p>After completing the publication details, you will have the opportunity to add one or more studies associated with this publication. Each study represents a distinct experiment or analysis conducted within the scope of the publication.</p>
+            <p>By following this structure, you help ensure that your data is accurately represented and easily accessible for future use.</p>
+            <p>Feel free to add as many studies as needed.</p>        
+        </div>
 
-            <label for="first_author" class = "survey-label">Who was the first author of this publication?</label>
-            <input type="text" id="first_author" name="first_author" value="${publication.first_author || ''}"><br>
-            <p class="survey-label-additional-info">Please list only the surname of the first author. If there were multiple first authors, list the surnames separated by commas.</p>
-
-            <label for="title" class = "survey-label">What was the title of this publication?</label>
-            <input type="text" id="title" name="title" value="${publication.title || ''}"><br>
-
-            <label for="apa_reference" class = "survey-label">Please provide an APA7 style reference for the publication:</label>
-            <input type="text" id="apa_reference" name="apa_reference" value="${publication.apa_reference || ''}"><br>
-
-            <label for="conducted" class = "survey-label">In what year was the study conducted?</label>
-            <input type="number" id="conducted" name="conducted" value="${publication.conducted || ''}"><br>
-
-            <label for="country" class = "survey-label">In what country was the study conducted?</label>
-            <input type="text" id="country" name="country" value="${publication.country || ''}"><br>
-
-            <label for="keywords" class = "survey-label">What are the keywords associated with the publication?</label>
-            <input type="text" id="keywords" name="keywords" value="${publication.keywords || ''}"><br>
-            <p class="survey-label-additional-info">Separate the keywords by commas: "keyword 1, keyword 2, keyword 3</p>
+        <h3 class="mb-3">Publication Details</h3>
+        <form id="publicationSurvey" class="survey-form p-3 border rounded shadow-sm bg-light">
             
-            <label for="contact" class = "survey-label">Provide contact information for further questions:</label>
-            <input type="text" id="contact" name="contact" value="${publication.contact || ''}"><br>
+        ${generateYesNoField('allow_share', 'Are you allowed to publicly share this data?', publication.allow_share)}
 
-            <button type="submit" class = "survey-button">Submit</button>
+            <div class="mb-3">
+                <label for="authors" class = "form-label">Who are the authors of the publication?</label>
+                <input type="text" class="form-control" id="authors" name="authors" value="${publication.authors || ''}">
+                <div class="form-text">Please list only the surnames of the authors separated by comma, i.e. "Smith, Müller, Garcia".</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="first_author" class = "form-label">Who was the first author of this publication?</label>
+                <input type="text" class="form-control" id="first_author" name="first_author" value="${publication.first_author || ''}">
+                <div class="form-text">Please list only the surname of the first author. If there were multiple first authors, list the surnames separated by commas.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class = "form-label">What was the title of this publication?</label>
+                <input type="text" class="form-control" id="title" name="title" value="${publication.title || ''}">
+            </div>
+
+            <div class="mb-3">
+                <label for="apa_reference" class = "form-label">Please provide an APA7 style reference for the publication:</label>
+                <input type="text" id="apa_reference" class="form-control" name="apa_reference" value="${publication.apa_reference || ''}">
+            </div>
+
+            <div class="mb-3">
+                <label for="conducted" class = "form-label">In what year was the study conducted?</label>
+                <input type="number" class="form-control" id="conducted" name="conducted" value="${publication.conducted || ''}">
+            </div>
+
+            <div class="mb-3">
+                <label for="country" class = "form-label">In what country was the study conducted?</label>
+                <input type="text" class="form-control" id="country" name="country" value="${publication.country || ''}">
+            </div>
+
+            ${generateYesNoField('peer_reviewed', 'Was this publication peer-reviewed?', publication.peer_reviewed)}
+
+
+            <div class="mb-3">
+                <label for="keywords" class = "form-label">What are the keywords associated with the publication?</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" value="${publication.keywords || ''}">
+                <div class="form-text">Separate the keywords by commas: "keyword 1, keyword 2, keyword 3</div>
+            </div>
+           
+            <div class="mb-3">
+                <label for="contact" class = "form-label">Provide contact information for further questions:</label>
+                <input type="text" class="form-control" id="contact" name="contact" value="${publication.contact || ''}">
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
     `;
@@ -149,6 +168,7 @@ function collectPublicationData(){
     const country = document.getElementById('country').value;
     const keywords = document.getElementById('keywords').value;
     const contact = document.getElementById('contact').value;
+    const peer_reviewed = getRadioButtonSelection('peer_reviewed');
     const allow_share = getRadioButtonSelection('allow_share');
 
     // Store the values in the control object
@@ -162,6 +182,7 @@ function collectPublicationData(){
         keywords: keywords,
         contact: contact,
         allow_share: allow_share,
+        peer_reviewed: peer_reviewed,
     }
 
     return publication_data;
@@ -173,7 +194,7 @@ function validatePublicationData(publication_data){
     var alert_message = 'This field does not match validation criteria.';
     // Check if any of the fields are empty
 
-    const required_keys = ['allow_share', 'authors', 'first_author', 'title', 'apa_reference', 'conducted', 'country', 'contact'];
+    const required_keys = ['allow_share', 'authors', 'first_author', 'title', 'apa_reference', 'conducted', 'country', 'peer_reviewed', 'contact'];
     for (const key of required_keys) {
         if (!publication_data[key]) {
             alert_message = 'This field is required.';
@@ -212,7 +233,7 @@ function updatePublicationSurvey(control, publication_idx) {
     control.publication_info[publication_idx].publication_data = publication_data;
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id = "publication-" + publication_idx;
