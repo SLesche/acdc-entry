@@ -57,7 +57,7 @@ function initializeConditionSurvey(control, publication_idx, study_idx, dataset_
 
         <h3 class="mb-3">Within Condition Details</h3>
 
-        <form id="conditionSurvey" class="survey-form">
+        <form id="conditionSurvey" class="survey-form p-3 border rounded shadow-sm bg-light">
             ${generateYesNoField('has_within_conditions', 'Does this data contain any additional within conditions?', condition_data.has_within_conditions)}
             
             <fieldset id="withinConditionsFieldset" ${condition_data.has_within_conditions == 1 ? '' : 'disabled'} class="border p-3 rounded mb-4">
