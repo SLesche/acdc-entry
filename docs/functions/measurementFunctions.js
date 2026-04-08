@@ -1,5 +1,5 @@
 function addMeasurement(parentElement, control, publication_idx, study_idx) {
-    const measurement_name = "Additional Measurements";
+    const measurement_name = "Measurements";
 
     // Create a new list item for the dataset
     const listItem = document.createElement("li");
@@ -53,66 +53,67 @@ function initializeMeasurementSurvey(control, publication_idx, study_idx){
     const constructs = ["intelligence", "extraversion", "anxiety", "memory", "creativity"];
 
     document.getElementById("content").innerHTML = `
-    <div class="display-text">
-        <h1>${study_name}: Additional Measurements</h1> 
-        <p>In this section, we want to know if you collected any additional measurements beyond the primary variables of your study. This information is valuable for helping others identify datasets that include external variables they may be interested in.</p>
-        <p>To make the data more searchable and easier to navigate, we encourage you to use broad construct terms, such as "extraversion," "intelligence," or "anxiety," rather than specific test batteries or questionnaires. This ensures that others can quickly find relevant data based on common constructs rather than being limited by specific measurement tools.</p>
-        <p>By providing this information, you contribute to a more comprehensive and accessible dataset, enabling others to explore connections between truth ratings and various other factors.</p>
+        <div class="display-text">
+            <div class="mb-3">
+                <h1 class="mb3">${study_name}: Additional Measurements</h1>
+                <div class="alert alert-info" role="alert">
+                    <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
+                    <p>In this section, we want to know if you collected any additional measurements beyond the primary variables of your study. This information is valuable for helping others identify datasets that include external variables they may be interested in.</p>
+                    <p>To make the data more searchable and easier to navigate, we encourage you to use broad construct terms, such as "extraversion," "intelligence," or "anxiety," rather than specific test batteries or questionnaires.</p>
+                    <p>By providing this information, you contribute to a more comprehensive and accessible dataset, enabling others to explore connections between truth ratings and various other factors.</p>
+                </div>
+            </div>
 
-        <label for="additional_measures" class="survey-label" id = "additional_measures">Did you collect any additional measures?</label>
-        <form class="radio-buttons" id = "additional_measures">
-            <label for="additional_measures_yes"><input type="radio" id="additional_measures_yes" name="additional_measures" value="1" ${measurement_data.additional_measures == 1 ? 'checked' : ''}>Yes</label>
-            <label for="additional_measures_no"><input type="radio" id="additional_measures_no" name="additional_measures"value="0" ${measurement_data.additional_measures == 0 ? 'checked' : ''}>No</label>
-        </form>
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="additional_measures">Did you collect any additional measures?</label>
+                <div id="additional_measures">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="additional_measures" id="additional_measures_yes" value="1" ${measurement_data.additional_measures == 1 ? 'checked' : ''}>
+                        <label class="form-check-label" for="additional_measures_yes">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="additional_measures" id="additional_measures_no" value="0" ${measurement_data.additional_measures == 0 ? 'checked' : ''}>
+                        <label class="form-check-label" for="additional_measures_no">No</label>
+                    </div>
+                </div>
+            </div>
 
-        <form id="measures_form" class = "survey-form" style="display: none;">
-            <label for="measure_input_details" class="survey-label">Add any additional variables you measured in the study:</label>
-            <input type="text" id="measure_input_details" name="measure_input_details"><br>
-            <p class="survey-label-additional-info">This can be detailed and may include the scale used to measure the variable: "APM Performance" or "BFI-2-XS".</p>
+            <form id="measures_form" class="survey-form p-3 border rounded shadow-sm bg-light" style="display: none;">
+                <div class="mb-3">
+                    <label for="measure_select_construct" class="form-label fw-bold">Add the name of the construct:</label>
+                    <input type="text" class="form-control" id="measure_select_construct" name="measure_select_construct">
+                    <small class="form-text text-muted fst-italic ms-1">Use broad terms like "intelligence" or "extraversion".</small>
+                </div>    
+            
+                <div class="mb-3">
+                    <label for="measure_input_details" class="form-label fw-bold">Add any additional variables you measured in the study:</label>
+                    <input type="text" class="form-control" id="measure_input_details" name="measure_input_details">
+                    <small class="form-text text-muted fst-italic ms-1">Be detailed! This can include the scale used: "APM Performance" or "BFI-2-XS".</small>
+                </div>
 
-            <label for="measure_input_construct" class="survey-label">Add the name of the construct:</label>
-            <select id="measure_select_construct" name="measure_select_construct">
-                <option value="">--Select a construct--</option>
-                ${constructs.map(construct => `<option value="${construct}">${construct}</option>`).join('')}
-                <option value="other">Other</option>
-            </select>
-            <input type="text" id="measure_input_construct" name="measure_input_construct" style="display: none;" placeholder="Enter construct"><br>
-            <p class="survey-label-additional-info">This should be the broad constructs: "intelligence" or "extraversion".</p>
+                <div class="mb-3">
+                    <button type="button" onclick="addMeasureToList()" class="btn btn-warning text-secondary">Add Measure</button>
+                </div>
 
-            <button type="button" onclick="addMeasureToList()" class="add-button">Add Measure</button><br><br>
+                <div class="mb-3" id="measures_list" style="display: none;">
+                    <label class="form-label fw-bold">List of Measures:</label>
+                    <ul id="measuresList" class="list-group ps-3"></ul>
+                </div>
+            </form>
 
-            <label class="survey-label" id="measures_list" style="display: none;">List of Measures:</label>
-            <ul id="measuresList" class="list-of-entries"></ul>
-        </form>
-
-        <button type="submit" class="survey-button" id="submit-button">Submit</button>
-    </div>
+            <button type="submit" class="btn btn-success" id="submit-button">Submit</button>
+        </div>
     `;
 
-    // Function to toggle the measures form
+    // Toggle visibility of measures form
     document.querySelectorAll('input[name="additional_measures"]').forEach((elem) => {
         elem.addEventListener('change', function() {
             const measuresForm = document.getElementById('measures_form');
-            if (this.value == 1) {
-                measuresForm.style.display = 'block';
-            } else {
-                measuresForm.style.display = 'none';
-            }
+            measuresForm.style.display = (this.value == 1) ? 'block' : 'none';
         });
     });
 
-    // Event listener for the construct dropdown
-    document.getElementById('measure_select_construct').addEventListener('change', function() {
-        const measureInputConstruct = document.getElementById('measure_input_construct');
-        if (this.value === 'other') {
-            measureInputConstruct.style.display = 'inline';
-        } else {
-            measureInputConstruct.style.display = 'none';
-            measureInputConstruct.value = ''; // Clear the input field if not 'other'
-        }
-    });
-
-    // Display the measures list if previously selected that additional measures were collected
+    // Prepopulate form if data exists
     if (measurement_data.additional_measures == 0) {
         document.getElementById("measures_list").style.display = "none";
     } else if (measurement_data.validated == 1 && measurement_data.measures.length > 0) {
@@ -122,27 +123,22 @@ function initializeMeasurementSurvey(control, publication_idx, study_idx){
         var measuresList = document.getElementById("measuresList");
         measurement_data.measures.forEach(function(measure) {
             var li = document.createElement("li");
+            li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
             li.textContent = `Construct: ${measure.construct}, Details: ${measure.details}`;
 
-            var removeButton = document.createElement("button");
-            removeButton.innerHTML = '&times;'; // Red X
-            removeButton.classList.add('delete-button');
-            removeButton.onclick = function() {
-                this.parentElement.remove();
-            };
-
-            li.appendChild(removeButton);
+            add_delete_button_to_list_item(li);
             measuresList.appendChild(li);
         });
     }
 
-    // Add event listener to the form's submit button
+    // Submit handler
     document.getElementById('submit-button').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
         if (validateMeasurementData(collectMeasurementData()) || control.testing) {
             updateMeasurementSurvey(control, publication_idx, study_idx);
         }
     });
+
 }
 
 function collectMeasurementData(){
@@ -209,7 +205,7 @@ function updateMeasurementSurvey(control, publication_idx, study_idx){
     control.publication_info[publication_idx].study_info[study_idx].measurement_data = measurement_data;
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id =  "measures-" + publication_idx + "-" + study_idx;
@@ -218,7 +214,6 @@ function updateMeasurementSurvey(control, publication_idx, study_idx){
 
 function addMeasureToList() {
     const constructSelect = document.getElementById('measure_select_construct');
-    const constructInput = document.getElementById('measure_input_construct');
     const detailsInput = document.getElementById('measure_input_details');
 
     let construct = constructSelect.value;
@@ -227,25 +222,23 @@ function addMeasureToList() {
     }
 
     if (construct === "" || detailsInput.value.trim() === "") {
-        alert("Please fill in both the construct and details.");
+        showAlert("Please fill in both the construct and details.", 'warning');
         return;
     }
 
     const li = document.createElement("li");
+    li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
     li.textContent = `Construct: ${construct}, Details: ${detailsInput.value}`;
 
-    const removeButton = document.createElement("button");
-    removeButton.innerHTML = '&times;'; // Red X
-    removeButton.classList.add('delete-button');
-    removeButton.onclick = function() {
-        this.parentElement.remove();
-    };
+    add_delete_button_to_list_item(li);
 
-    li.appendChild(removeButton);
-    document.getElementById("measuresList").appendChild(li);
+    const listContainer = document.getElementById("measuresList");
+    listContainer.appendChild(li);
+
+    // ✅ Make the list visible if hidden
+    document.getElementById("measures_list").style.display = "block";
 
     // Clear the input fields
     constructSelect.value = "";
-    constructInput.value = "";
     detailsInput.value = "";
 }
