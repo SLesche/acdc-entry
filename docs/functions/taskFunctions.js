@@ -142,7 +142,7 @@ function initializeTaskSurvey(control, task_idx) {
                 <input type="text" class="form-control" id="task_description" name="task_description" value="${task_data.task_description || ''}">
             </div>
             
-            <button type="submit" class="survey-button">Submit</button>
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
     `;
