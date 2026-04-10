@@ -98,6 +98,8 @@ function showSubmissionSuccessModal() {
     // a.click();
     // document.body.removeChild(a);
 
+    // // UNCOMMENT UNTIL HERE
+
     showSubmissionSuccessModal();
 }
 
