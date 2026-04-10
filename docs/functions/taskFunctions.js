@@ -106,29 +106,41 @@ function initializeTaskSurvey(control, task_idx) {
     document.getElementById("content").innerHTML = `
     <div class="display-text">
         <h1>${task_name}</h1>
-        <p>In this section, please provide information about tasks <strong>${task_name}</strong>.</p>
-        <form id="taskSurvey" class = "survey-form">
-            <label for="task_name" class="survey-label">What was the name of the task you employed?</label>
-            <div class="radio-buttons" id = "task_name">
-                <input type="radio" id="flanker" name="task_name" value="flanker" ${task_data.task_name === 'flanker' ? 'checked' : ''}>
-                <label for="flanker">Flanker Task</label>
-                <input type="radio" id="stroop" name="task_name" value="stroop" ${task_data.task_name === 'stroop' ? 'checked' : ''}>
-                <label for="stroop">Stroop Task</label>
-                <input type="radio" id="simon" name="task_name" value="simon" ${task_data.task_name === 'simon' ? 'checked' : ''}>
-                <label for="simon">Simon Task</label>
-                <input type="radio" id="other" name="task_name" value="other" ${task_data.task_name === 'other' ? 'checked' : ''}>
-                <label for="other">Other</label><br>
+        <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Before You Begin</h5>
+            <p>In this section, please provide information about <strong>${task_name}</strong>. You will be asked to provide the type of task and a short description of the task. Feel free to be rather detailed here, in case your paradigm deviates substantially from the standard descriptions.</p>
+        </div>
+
+        <h3 class="mb-3">Task Details</h3>
+        <form id="taskSurvey"  class="survey-form p-3 border rounded shadow-sm bg-light">
+            <div class="mb-4">
+                <label for="task_name" class="form-label">What was the name of the task you employed?</label>
+                <div id = "task_name">
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="flanker" name="task_name" value="flanker" ${task_data.task_name === 'flanker' ? 'checked' : ''}>
+                    <label class="form-check-label" for="flanker">Flanker Task</label>
+                    </div>
+
+                    <input class="form-check-input" type="radio" id="stroop" name="task_name" value="stroop" ${task_data.task_name === 'stroop' ? 'checked' : ''}>
+                    <label class="form-check-label" for="stroop">Stroop Task</label>
+                    <input class="form-check-input" type="radio" id="simon" name="task_name" value="simon" ${task_data.task_name === 'simon' ? 'checked' : ''}>
+                    <label class="form-check-label" for="simon">Simon Task</label>
+                    <input class="form-check-input" type="radio" id="other" name="task_name" value="other" ${task_data.task_name === 'other' ? 'checked' : ''}>
+                    <label class="form-check-label" for="other">Other</label><br>
+                </div>
             </div>
 
             <fieldset id="other_task_name_fieldset" ${task_data.task_name === 'other' ? '' : 'disabled'}>
-                <div class="form-item">
-                    <label for="task_name_details" class="survey-label">Provide a short name of the task you used:</label>
-                    <input type="text" id="task_name_details" name="task_name_details" value="${task_data.task_name_details || ''}"/>
+                <div class="mb-4">
+                    <label for="task_name_details" class="form-label">Provide a short name of the task you used:</label>
+                    <input type="text" class="form-control" id="task_name_details" name="task_name_details" value="${task_data.task_name_details || ''}"/>
                 </div>
             </fieldset>
-
-            <label for="task_description" class = "survey-label">Task Description:</label>
-            <input type="text" id="task_description" name="task_description" value="${task_data.task_description || ''}"><br>
+            
+            <div class="mb-4">
+                <label for="task_description" class = "form-label">Task Description:</label>
+                <input type="text" class="form-control" id="task_description" name="task_description" value="${task_data.task_description || ''}">
+            </div>
             
             <button type="submit" class="survey-button">Submit</button>
         </form>
@@ -202,7 +214,7 @@ function updateTaskSurvey(control, task_idx) {
     control.task_info[task_idx].task_data = task_data;
 
     // Optionally, display a confirmation message
-    alert('Survey submitted successfully!');
+    showAlert('Survey submitted successfully!', 'success');
 
     // Add a checkmark to the currently selected sidebar item
     const item_id =  "task-" + task_idx;

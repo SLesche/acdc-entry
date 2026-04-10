@@ -47,42 +47,63 @@ function cleanDataForSubmission(control) {
     return cleaned_control
 }
 
-function submitData(control) {
+function showSubmissionSuccessModal() {
+    // Initialize Bootstrap modal instance for the modal element
+    const modalEl = document.getElementById('confirmModalSubmission');
+    const modal = new bootstrap.Modal(modalEl);
+    
+    const user = 'julia.haaf';
+    const domain = 'uni-potsdam.de';
+    const email = `${user}@${domain}`;
+    const link = document.getElementById('email-success1');
+    link.href = `mailto:${email}`;
+    link.textContent = email;
+
+    // Show the modal
+    modal.show();
+  
+    // Optional: handle "Got it!" button click to close the modal
+    const confirmBtn = document.getElementById('confirmEmailBtn');
+    confirmBtn.onclick = () => modal.hide();
+  }
+  
+
+
+  function submitData(control) {
     if (!validate_submission(control)) {
         return;
     }
 
-    const version_number = "1.0.0"; // Replace with the actual version number
+    //console.log(control);
+    const version_number = "1.0.1"; // Replace with the actual version number
 
-    console.log(control);
-
-    // clean the control data
-    const cleaned_control = cleanDataForSubmission(control);
-
-    console.log(cleaned_control);
-
+    // Save the progress before submission
+    saveProgress(control, true);
     control.version_number = version_number;
-    cleaned_control.version_number = version_number;
+    
+    // // UNCOMMENT THE FOLLOWING LINES TO ENABLE DIRECT SUBMISSION DOWNLOAD
+    // // clean the control data
+    // const cleaned_control = cleanDataForSubmission(control);
+    // cleaned_control.version_number = version_number;
+    // // Write the data into a json file
+    // const submission_data = JSON.stringify(cleaned_control);
 
-    // Write the data into a json file
-    const submission_data = JSON.stringify(cleaned_control);
+    // // Download the data locally
+    // const blob = new Blob([submission_data], { type: "application/json" });
+    // const url = URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = `submission_${cleaned_control.publication_data.first_author}_${cleaned_control.publication_data.conducted}.json`;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
 
-    // Download the data locally
-    const blob = new Blob([submission_data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `submission_${cleaned_control.publication_data.first_author}_${cleaned_control.publication_data.conducted}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // // UNCOMMENT UNTIL HERE
 
-    saveProgress(control);
-
-    alert("Data submitted successfully! Send the downloaded files to our team via email (julia.haaf@uni-potsdam.de). Thank you for your contribution!");
+    showSubmissionSuccessModal();
 }
 
-function saveProgress(control){
+function saveProgress(control, is_submission = false){
     control.progress_file = true;
     // Write the data into a json file
     const submission_data = JSON.stringify(control);
@@ -92,13 +113,16 @@ function saveProgress(control){
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `progress_${control.publication_info[0].publication_data.first_author}_${control.publication_info[0].publication_data.conducted}.json`;
+    
+    const type = is_submission ? 'submission_check' : 'progress';
+    a.download = `${type}_${control.publication_info[0].publication_data.first_author}_${control.publication_info[0].publication_data.conducted}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    alert("Progress file downloaded successfully!");
+    showAlert("Progress file downloaded successfully!", 'success');
 }
+
 function addCheckmarksFromProgress(control) {
     const num_total_publications = Object.keys(control.publication_info).length;
     const num_tasks = Object.keys(control.task_info).length;

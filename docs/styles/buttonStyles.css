@@ -8,10 +8,10 @@
 }
 
 .menu-button {
-    background: var(--menu-button-background);
+    background: var(--bs-primary);
     border: none;
     cursor: pointer;
-    color: var(--menu-button-color);
+    color: var(--bs-warning);
     text-decoration: underline;
 }
 
@@ -55,14 +55,14 @@
 }
 
 .add-button {
-    background-color: var(--add-button-background);
-    color: var(--add-button-color);
+    background-color:  var(--bs-warning);
+    color:  var(--bs-secondary);
     border: none;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    /* font-size: 16px; */
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 10px;
@@ -74,8 +74,14 @@
     margin-right: 0;
 }
 
-.green-checkmark {
-    color: green;
-    margin-left: 8px; /* Adjust as needed */
-    font-weight: bold;
+.green-checkmark-custom i {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1;
+    vertical-align: middle;
+    display: inline-block;
+  }
+.form-check-input:not(:checked) {
+    background-color: #ebebeb; /* Change to a darker shade as desired */
+    border-color: #888;
 }
