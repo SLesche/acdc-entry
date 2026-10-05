@@ -143,7 +143,7 @@ function initializeDataSurvey(control, publication_idx, study_idx, dataset_idx) 
     </div>
     `;
 
-    populateTaskOptions(control, publication_idx, study_idx);
+    populateTaskOptions(control, publication_idx, study_idx, dataset_idx);
 
     document.getElementById('dataInfoSurvey').addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent default form submission
@@ -217,10 +217,10 @@ function updateDataInfo(control, publication_idx, study_idx, dataset_idx) {
     addGreenCheckmarkById(item_id);
 }
 
-function populateTaskOptions(control, publication_idx, study_idx) {
+function populateTaskOptions(control, publication_idx, study_idx, dataset_idx) {
     const taskSelect = document.getElementById('task_name');
     
-    const study_data = control.publication_info[publication_idx].study_info[study_idx].study_data;
+    const dataset_data = control.publication_info[publication_idx].study_info[study_idx].dataset_info[dataset_idx].dataset_data;
 
     // Clear existing options
     taskSelect.innerHTML = '';
@@ -246,8 +246,8 @@ function populateTaskOptions(control, publication_idx, study_idx) {
     }
 
     // Set the default value
-    if (study_data.task_name) {
-        taskSelect.value = study_data.task_name;
+    if (dataset_data.task_name) {
+        taskSelect.value = dataset_data.task_name;
     } else {
         taskSelect.value = ''; // Default to "Select a task" option
     }
